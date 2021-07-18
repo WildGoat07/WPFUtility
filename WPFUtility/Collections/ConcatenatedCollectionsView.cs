@@ -45,7 +45,7 @@ namespace Wildgoat.WPFUtility.Collections
 
         IEnumerator IEnumerable.GetEnumerator() => GetEnumerator();
 
-        public IEnumerator<object?> GetEnumerator() => new ConcatenatedCollectionViewEnumerator(this);
+        public IEnumerator<object?> GetEnumerator() => new Enumerator(this);
 
         protected void OnSourceCollectionChanged(object sender, NotifyCollectionChangedEventArgs e)
         {
@@ -100,9 +100,9 @@ namespace Wildgoat.WPFUtility.Collections
                 source.CollectionChanged -= OnSourceCollectionChanged;
         }
 
-        private class ConcatenatedCollectionViewEnumerator : IEnumerator<object?>, IEnumerator
+        private class Enumerator : IEnumerator<object?>, IEnumerator
         {
-            public ConcatenatedCollectionViewEnumerator(ConcatenatedCollectionsView list)
+            public Enumerator(ConcatenatedCollectionsView list)
             {
                 Source = list;
             }
