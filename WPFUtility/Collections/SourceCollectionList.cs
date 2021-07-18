@@ -21,6 +21,9 @@ namespace Wildgoat.WPFUtility.Collections
         public SourceCollectionList(IList<T> underlyingCollection)
         {
             UnderlyingCollection = underlyingCollection;
+            foreach (var item in underlyingCollection)
+                if (item is INotifyPropertyChanged notifier)
+                    notifier.PropertyChanged += OnItemPropertyChanged;
             SyncRoot = new object();
         }
 
@@ -31,15 +34,27 @@ namespace Wildgoat.WPFUtility.Collections
         {
         }
 
+        ~SourceCollectionList()
+        {
+            foreach (var item in UnderlyingCollection)
+                if (item is INotifyPropertyChanged notifier)
+                    notifier.PropertyChanged -= OnItemPropertyChanged;
+        }
+
         public event NotifyCollectionChangedEventHandler? CollectionChanged;
 
         public event PropertyChangedEventHandler? PropertyChanged;
 
         public int Count => UnderlyingCollection.Count;
+
         public bool IsFixedSize => UnderlyingCollection is IList list ? list.IsFixedSize : false;
+
         public bool IsReadOnly => UnderlyingCollection.IsReadOnly;
+
         public bool IsSynchronized => UnderlyingCollection is ICollection collection ? collection.IsSynchronized : false;
+
         public object SyncRoot { get; }
+
         private IList<T> UnderlyingCollection { get; }
 
         object? IList.this[int index]
@@ -60,7 +75,11 @@ namespace Wildgoat.WPFUtility.Collections
             set
             {
                 var oldValue = UnderlyingCollection[index];
+                if (oldValue is INotifyPropertyChanged notifier)
+                    notifier.PropertyChanged -= OnItemPropertyChanged;
                 UnderlyingCollection[index] = value;
+                if (value is INotifyPropertyChanged newNotifier)
+                    newNotifier.PropertyChanged += OnItemPropertyChanged;
                 CollectionChanged?.Invoke(this, new NotifyCollectionChangedEventArgs(NotifyCollectionChangedAction.Replace, value, oldValue, index));
             }
         }
@@ -76,7 +95,11 @@ namespace Wildgoat.WPFUtility.Collections
                     ? UnderlyingCollection.Count - index.Value
                     : index.Value;
                 var oldValue = UnderlyingCollection[integerIndex];
+                if (oldValue is INotifyPropertyChanged notifier)
+                    notifier.PropertyChanged -= OnItemPropertyChanged;
                 UnderlyingCollection[integerIndex] = value;
+                if (value is INotifyPropertyChanged newNotifier)
+                    newNotifier.PropertyChanged += OnItemPropertyChanged;
                 CollectionChanged?.Invoke(this, new NotifyCollectionChangedEventArgs(NotifyCollectionChangedAction.Replace, value, oldValue, integerIndex));
             }
         }
@@ -96,6 +119,8 @@ namespace Wildgoat.WPFUtility.Collections
         public void Add(T item)
         {
             UnderlyingCollection.Add(item);
+            if (item is INotifyPropertyChanged notifier)
+                notifier.PropertyChanged += OnItemPropertyChanged;
             CollectionChanged?.Invoke(this, new NotifyCollectionChangedEventArgs(NotifyCollectionChangedAction.Add, item, Count - 1));
             PropertyChanged?.Invoke(this, new PropertyChangedEventArgs(nameof(Count)));
         }
@@ -119,7 +144,11 @@ namespace Wildgoat.WPFUtility.Collections
         {
             var startIndex = Count;
             foreach (var item in items)
+            {
                 UnderlyingCollection.Add(item);
+                if (item is INotifyPropertyChanged notifier)
+                    notifier.PropertyChanged += OnItemPropertyChanged;
+            }
             CollectionChanged?.Invoke(this, new NotifyCollectionChangedEventArgs(NotifyCollectionChangedAction.Add, items.ToList(), startIndex));
             PropertyChanged?.Invoke(this, new PropertyChangedEventArgs(nameof(Count)));
         }
@@ -133,6 +162,9 @@ namespace Wildgoat.WPFUtility.Collections
         public void Clear()
         {
             var removedItems = UnderlyingCollection.ToList();
+            foreach (var item in UnderlyingCollection)
+                if (item is INotifyPropertyChanged notifier)
+                    notifier.PropertyChanged -= OnItemPropertyChanged;
             UnderlyingCollection.Clear();
             CollectionChanged?.Invoke(this, new NotifyCollectionChangedEventArgs(NotifyCollectionChangedAction.Remove, removedItems, 0));
             PropertyChanged?.Invoke(this, new PropertyChangedEventArgs(nameof(Count)));
@@ -173,6 +205,8 @@ namespace Wildgoat.WPFUtility.Collections
         public void Insert(int index, T item)
         {
             UnderlyingCollection.Insert(index, item);
+            if (item is INotifyPropertyChanged notifier)
+                notifier.PropertyChanged += OnItemPropertyChanged;
             CollectionChanged?.Invoke(this, new NotifyCollectionChangedEventArgs(NotifyCollectionChangedAction.Add, item, index));
             PropertyChanged?.Invoke(this, new PropertyChangedEventArgs(nameof(Count)));
         }
@@ -229,6 +263,8 @@ namespace Wildgoat.WPFUtility.Collections
             var result = UnderlyingCollection.Remove(item);
             if (result)
             {
+                if (item is INotifyPropertyChanged notifier)
+                    notifier.PropertyChanged -= OnItemPropertyChanged;
                 CollectionChanged?.Invoke(this, new NotifyCollectionChangedEventArgs(NotifyCollectionChangedAction.Remove, item, index));
                 PropertyChanged?.Invoke(this, new PropertyChangedEventArgs(nameof(Count)));
             }
@@ -245,8 +281,17 @@ namespace Wildgoat.WPFUtility.Collections
         {
             var removedItem = UnderlyingCollection[index];
             UnderlyingCollection.RemoveAt(index);
+            if (removedItem is INotifyPropertyChanged notifier)
+                notifier.PropertyChanged -= OnItemPropertyChanged;
             CollectionChanged?.Invoke(this, new NotifyCollectionChangedEventArgs(NotifyCollectionChangedAction.Remove, removedItem, index));
             PropertyChanged?.Invoke(this, new PropertyChangedEventArgs(nameof(Count)));
+        }
+
+        private void OnItemPropertyChanged(object sender, PropertyChangedEventArgs e)
+        {
+            var item = (T)sender;
+            var index = UnderlyingCollection.IndexOf(item);
+            CollectionChanged?.Invoke(this, new NotifyCollectionChangedEventArgs(NotifyCollectionChangedAction.Replace, item, item, index));
         }
     }
 }
