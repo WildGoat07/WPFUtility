@@ -14,12 +14,19 @@ namespace Wildgoat.WPFUtility.Collections
     /// <typeparam name="T">Type of the items in the list</typeparam>
     public class SourceCollectionList<T> : IBaseCollectionSource, IList<T>, IList, IReadOnlyList<T>, ICollection<T>, ICollection, IReadOnlyCollection<T>, IEnumerable<T>, IEnumerable, INotifyCollectionChanged, INotifyPropertyChanged
     {
+        /// <summary>
+        /// Create a new source collection using a specified existing collection.
+        /// </summary>
+        /// <param name="underlyingCollection">Collection to use as storage</param>
         public SourceCollectionList(IList<T> underlyingCollection)
         {
             UnderlyingCollection = underlyingCollection;
             SyncRoot = new object();
         }
 
+        /// <summary>
+        /// Create a new source collection.
+        /// </summary>
         public SourceCollectionList() : this(new List<T>())
         {
         }
