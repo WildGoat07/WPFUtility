@@ -33,8 +33,7 @@ namespace Wildgoat.WPFUtility.Collections
             set
             {
                 UnlinkSources();
-                if (sources != null)
-                    CollectionChanged?.Invoke(this, new NotifyCollectionChangedEventArgs(NotifyCollectionChangedAction.Remove, sources.Select(source => source.Cast<object?>()).SelectMany(source => source).ToList(), 0));
+                CollectionChanged?.Invoke(this, new NotifyCollectionChangedEventArgs(NotifyCollectionChangedAction.Remove, sources.Select(source => source.Cast<object?>()).SelectMany(source => source).ToList(), 0));
                 sources = value;
                 InitSources();
                 CollectionChanged?.Invoke(this, new NotifyCollectionChangedEventArgs(NotifyCollectionChangedAction.Add, sources.Select(source => source.Cast<object?>()).SelectMany(source => source).ToList(), 0));
