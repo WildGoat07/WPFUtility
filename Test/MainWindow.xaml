@@ -1,0 +1,33 @@
+﻿<Window x:Class="Test.MainWindow"
+        xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+        xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+        xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+        xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+        xmlns:local="clr-namespace:Test"
+        mc:Ignorable="d"
+        Title="MainWindow" Height="450" Width="800">
+    <DockPanel>
+        <Button
+            Click="Button_Click"
+            DockPanel.Dock="Top"
+            Content="add1" />
+        <Button
+            Click="Button_Click_1"
+            DockPanel.Dock="Top"
+            Content="add2" />
+        <Button
+            Click="Button_Click_2"
+            DockPanel.Dock="Top"
+            Content="add3" />
+        <Button
+            Click="Button_Click_3"
+            DockPanel.Dock="Top"
+            Content="remove1" />
+        <Button
+            Click="Button_Click_4"
+            DockPanel.Dock="Top"
+            Content="clear2" />
+        <ListBox
+            ItemsSource="{Binding RelativeSource={RelativeSource AncestorType=local:MainWindow}, Path=List}" />
+    </DockPanel>
+</Window>
