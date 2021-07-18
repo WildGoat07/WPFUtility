@@ -41,13 +41,22 @@ namespace Wildgoat.WPFUtility.Collections
             set
             {
                 if (value is T item)
-                    UnderlyingCollection[index] = item;
+                    this[index] = item;
                 else
                     throw new InvalidOperationException($"The item of type {value?.GetType()} can not be added as {typeof(T)}");
             }
         }
 
-        public T this[int index] { get => UnderlyingCollection[index]; set => UnderlyingCollection[index] = value; }
+        public T this[int index]
+        {
+            get => UnderlyingCollection[index];
+            set
+            {
+                var oldValue = UnderlyingCollection[index];
+                UnderlyingCollection[index] = value;
+                CollectionChanged?.Invoke(this, new NotifyCollectionChangedEventArgs(NotifyCollectionChangedAction.Replace, value, oldValue, index));
+            }
+        }
 
         public void Add(T item)
         {
