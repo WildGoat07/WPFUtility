@@ -82,7 +82,7 @@ namespace Wildgoat.WPFUtility.Collections
                     {
                         filtered.InsertRange(e.NewStartingIndex, e.NewItems.Cast<object?>().Select(item => filter(item)));
 
-                        var items = e.NewItems.Cast<object?>().Where(item => filter(item));
+                        var items = e.NewItems.Cast<object?>().Where((item, index) => filtered[index + e.NewStartingIndex]);
                         if (items.Any())
                             CollectionChanged?.Invoke(this, new NotifyCollectionChangedEventArgs(NotifyCollectionChangedAction.Add, items.ToList(), GetFilteredIndex(e.NewStartingIndex)));
                     }
@@ -134,7 +134,7 @@ namespace Wildgoat.WPFUtility.Collections
                             filtered.RemoveRange(e.OldStartingIndex, range.Count);
                             filtered.InsertRange(e.NewStartingIndex, range);
                         }
-                        var items = e.NewItems.Cast<object?>().Where(item => filter(item));
+                        var items = e.NewItems.Cast<object?>().Where((item, index) => filtered[index + e.NewStartingIndex]);
                         if (items.Any())
                             CollectionChanged?.Invoke(this, new NotifyCollectionChangedEventArgs(NotifyCollectionChangedAction.Move, items.ToList(), newIndex, oldIndex));
                     }
