@@ -1,0 +1,146 @@
+<UserControl x:Class="Wildgoat.WPFUtility.ActionIcon.ActionIcon"
+             xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+             xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+             xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+             xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+             xmlns:local="clr-namespace:Wildgoat.WPFUtility.ActionIcon"
+             mc:Ignorable="d"
+             UseLayoutRounding="True">
+    <UserControl.Resources>
+        <ResourceDictionary>
+            <ResourceDictionary.MergedDictionaries>
+                <ResourceDictionary
+                    Source="Icons.xaml" />
+                <ResourceDictionary>
+                    <Style
+                        TargetType="Image"
+                        x:Key="IconImage">
+                        <Style.Triggers>
+                            <Trigger
+                                Property="IsEnabled"
+                                Value="False">
+                                <Setter
+                                    Property="Opacity"
+                                    Value=".5" />
+                            </Trigger>
+                        </Style.Triggers>
+                    </Style>
+                    <DataTemplate
+                        x:Key="baseTemplate">
+                        <Image
+                            Style="{StaticResource IconImage}"
+                            Stretch="None"
+                            Source="{Binding RelativeSource={RelativeSource AncestorType={x:Type local:ActionIcon}}, Path=BaseSource}" />
+                    </DataTemplate>
+                    <DataTemplate
+                        x:Key="actionTemplate">
+                        <Image
+                            Style="{StaticResource IconImage}"
+                            Stretch="None"
+                            Source="{Binding RelativeSource={RelativeSource AncestorType={x:Type local:ActionIcon}}, Path=ActionSource}" />
+                    </DataTemplate>
+                    <DataTemplate
+                        x:Key="statusTemplate">
+                        <Image
+                            Style="{StaticResource IconImage}"
+                            Stretch="None"
+                            Source="{Binding RelativeSource={RelativeSource AncestorType={x:Type local:ActionIcon}}, Path=StatusSource}" />
+                    </DataTemplate>
+                    <DataTemplate
+                        x:Key="modifierTemplate">
+                        <Image
+                            Style="{StaticResource IconImage}"
+                            Stretch="None"
+                            Source="{Binding RelativeSource={RelativeSource AncestorType={x:Type local:ActionIcon}}, Path=ModifierSource}" />
+                    </DataTemplate>
+                </ResourceDictionary>
+            </ResourceDictionary.MergedDictionaries>
+        </ResourceDictionary>
+    </UserControl.Resources>
+    <Grid
+        VerticalAlignment="Center"
+        HorizontalAlignment="Center">
+        <ContentControl>
+            <ContentControl.Style>
+                <Style
+                    TargetType="ContentControl">
+                    <Setter
+                        Property="ContentTemplate"
+                        Value="{Binding RelativeSource={RelativeSource AncestorType=local:ActionIcon}, Path=BaseTemplate}" />
+                    <Style.Triggers>
+                        <DataTrigger
+                            Binding="{Binding RelativeSource={RelativeSource AncestorType=local:ActionIcon}, Path=BaseTemplate}"
+                            Value="{x:Null}">
+                            <Setter
+                                Property="ContentTemplate"
+                                Value="{StaticResource baseTemplate}" />
+                        </DataTrigger>
+                    </Style.Triggers>
+                </Style>
+            </ContentControl.Style>
+        </ContentControl>
+        <ContentControl
+            VerticalAlignment="Bottom"
+            HorizontalAlignment="Left">
+            <ContentControl.Style>
+                <Style
+                    TargetType="ContentControl">
+                    <Setter
+                        Property="ContentTemplate"
+                        Value="{Binding RelativeSource={RelativeSource AncestorType=local:ActionIcon}, Path=ModifierTemplate}" />
+                    <Style.Triggers>
+                        <DataTrigger
+                            Binding="{Binding RelativeSource={RelativeSource AncestorType=local:ActionIcon}, Path=ModifierTemplate}"
+                            Value="{x:Null}">
+                            <Setter
+                                Property="ContentTemplate"
+                                Value="{StaticResource modifierTemplate}" />
+                        </DataTrigger>
+                    </Style.Triggers>
+                </Style>
+            </ContentControl.Style>
+        </ContentControl>
+        <ContentControl
+            VerticalAlignment="Bottom"
+            HorizontalAlignment="Right">
+            <ContentControl.Style>
+                <Style
+                    TargetType="ContentControl">
+                    <Setter
+                        Property="ContentTemplate"
+                        Value="{Binding RelativeSource={RelativeSource AncestorType=local:ActionIcon}, Path=StatusTemplate}" />
+                    <Style.Triggers>
+                        <DataTrigger
+                            Binding="{Binding RelativeSource={RelativeSource AncestorType=local:ActionIcon}, Path=StatusTemplate}"
+                            Value="{x:Null}">
+                            <Setter
+                                Property="ContentTemplate"
+                                Value="{StaticResource statusTemplate}" />
+                        </DataTrigger>
+                    </Style.Triggers>
+                </Style>
+            </ContentControl.Style>
+        </ContentControl>
+        <ContentControl
+            VerticalAlignment="Top"
+            HorizontalAlignment="Left">
+            <ContentControl.Style>
+                <Style
+                    TargetType="ContentControl">
+                    <Setter
+                        Property="ContentTemplate"
+                        Value="{Binding RelativeSource={RelativeSource AncestorType=local:ActionIcon}, Path=ActionTemplate}" />
+                    <Style.Triggers>
+                        <DataTrigger
+                            Binding="{Binding RelativeSource={RelativeSource AncestorType=local:ActionIcon}, Path=ActionTemplate}"
+                            Value="{x:Null}">
+                            <Setter
+                                Property="ContentTemplate"
+                                Value="{StaticResource actionTemplate}" />
+                        </DataTrigger>
+                    </Style.Triggers>
+                </Style>
+            </ContentControl.Style>
+        </ContentControl>
+    </Grid>
+</UserControl>

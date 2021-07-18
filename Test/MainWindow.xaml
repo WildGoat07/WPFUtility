@@ -4,9 +4,22 @@
         xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
         xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
         xmlns:local="clr-namespace:Test"
+        xmlns:ai="clr-namespace:Wildgoat.WPFUtility.ActionIcon;assembly=WPFUtility"
         mc:Ignorable="d"
         Title="MainWindow" Height="450" Width="800">
     <DockPanel>
+        <ai:ActionIcon
+            DockPanel.Dock="Top"
+            Action="ADD">
+            <ai:ActionIcon.BaseTemplate>
+                <DataTemplate>
+                    <Rectangle
+                        Fill="Red"
+                        Height="16"
+                        Width="16" />
+                </DataTemplate>
+            </ai:ActionIcon.BaseTemplate>
+        </ai:ActionIcon>
         <Button
             Click="Button_Click"
             DockPanel.Dock="Top"

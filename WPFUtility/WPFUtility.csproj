@@ -6,4 +6,76 @@
     <Nullable>enable</Nullable>
     <RootNamespace>Wildgoat.WPFUtility</RootNamespace>
   </PropertyGroup>
+
+  <ItemGroup>
+    <None Remove="ActionIcon\icons\Add.png" />
+    <None Remove="ActionIcon\icons\Alert.png" />
+    <None Remove="ActionIcon\icons\Delete.png" />
+    <None Remove="ActionIcon\icons\Download.png" />
+    <None Remove="ActionIcon\icons\Edit.png" />
+    <None Remove="ActionIcon\icons\Edit_reverse.png" />
+    <None Remove="ActionIcon\icons\Error.png" />
+    <None Remove="ActionIcon\icons\Find.png" />
+    <None Remove="ActionIcon\icons\Help.png" />
+    <None Remove="ActionIcon\icons\Import.png" />
+    <None Remove="ActionIcon\icons\Info.png" />
+    <None Remove="ActionIcon\icons\Lock.png" />
+    <None Remove="ActionIcon\icons\New.png" />
+    <None Remove="ActionIcon\icons\Next.png" />
+    <None Remove="ActionIcon\icons\No.png" />
+    <None Remove="ActionIcon\icons\Ok.png" />
+    <None Remove="ActionIcon\icons\Open.png" />
+    <None Remove="ActionIcon\icons\Pause.png" />
+    <None Remove="ActionIcon\icons\Previous.png" />
+    <None Remove="ActionIcon\icons\Redo.png" />
+    <None Remove="ActionIcon\icons\Refresh.png" />
+    <None Remove="ActionIcon\icons\Remove.png" />
+    <None Remove="ActionIcon\icons\Run.png" />
+    <None Remove="ActionIcon\icons\Save.png" />
+    <None Remove="ActionIcon\icons\SaveReverse.png" />
+    <None Remove="ActionIcon\icons\Share.png" />
+    <None Remove="ActionIcon\icons\Star.png" />
+    <None Remove="ActionIcon\icons\Stop.png" />
+    <None Remove="ActionIcon\icons\Sync.png" />
+    <None Remove="ActionIcon\icons\Undo.png" />
+    <None Remove="ActionIcon\icons\Upload.png" />
+    <None Remove="ActionIcon\icons\Validate.png" />
+    <None Remove="ActionIcon\icons\Warning.png" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <Resource Include="ActionIcon\icons\Add.png" />
+    <Resource Include="ActionIcon\icons\Alert.png" />
+    <Resource Include="ActionIcon\icons\Delete.png" />
+    <Resource Include="ActionIcon\icons\Download.png" />
+    <Resource Include="ActionIcon\icons\Edit.png" />
+    <Resource Include="ActionIcon\icons\Edit_reverse.png" />
+    <Resource Include="ActionIcon\icons\Error.png" />
+    <Resource Include="ActionIcon\icons\Find.png" />
+    <Resource Include="ActionIcon\icons\Help.png" />
+    <Resource Include="ActionIcon\icons\Import.png" />
+    <Resource Include="ActionIcon\icons\Info.png" />
+    <Resource Include="ActionIcon\icons\Lock.png" />
+    <Resource Include="ActionIcon\icons\New.png" />
+    <Resource Include="ActionIcon\icons\Next.png" />
+    <Resource Include="ActionIcon\icons\No.png" />
+    <Resource Include="ActionIcon\icons\Ok.png" />
+    <Resource Include="ActionIcon\icons\Open.png" />
+    <Resource Include="ActionIcon\icons\Pause.png" />
+    <Resource Include="ActionIcon\icons\Previous.png" />
+    <Resource Include="ActionIcon\icons\Redo.png" />
+    <Resource Include="ActionIcon\icons\Refresh.png" />
+    <Resource Include="ActionIcon\icons\Remove.png" />
+    <Resource Include="ActionIcon\icons\Run.png" />
+    <Resource Include="ActionIcon\icons\Save.png" />
+    <Resource Include="ActionIcon\icons\SaveReverse.png" />
+    <Resource Include="ActionIcon\icons\Share.png" />
+    <Resource Include="ActionIcon\icons\Star.png" />
+    <Resource Include="ActionIcon\icons\Stop.png" />
+    <Resource Include="ActionIcon\icons\Sync.png" />
+    <Resource Include="ActionIcon\icons\Undo.png" />
+    <Resource Include="ActionIcon\icons\Upload.png" />
+    <Resource Include="ActionIcon\icons\Validate.png" />
+    <Resource Include="ActionIcon\icons\Warning.png" />
+  </ItemGroup>
 </Project>
