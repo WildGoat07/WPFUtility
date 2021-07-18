@@ -150,6 +150,44 @@ namespace Wildgoat.WPFUtility.Collections
                 throw new InvalidOperationException($"The item of type {value?.GetType()} can not be added as {typeof(T)}");
         }
 
+        /// <summary>
+        /// Move an item to another place in the list
+        /// </summary>
+        /// <param name="source">Initial index of the item</param>
+        /// <param name="target">Target index of the item</param>
+        public void Move(int source, int target)
+        {
+            if (source != target)
+            {
+                var item = UnderlyingCollection[source];
+                UnderlyingCollection.Insert(target, item);
+                if (source < target)
+                    UnderlyingCollection.RemoveAt(source);
+                else
+                    UnderlyingCollection.RemoveAt(source + 1);
+                CollectionChanged?.Invoke(this, new NotifyCollectionChangedEventArgs(NotifyCollectionChangedAction.Move, item, target, source));
+            }
+        }
+
+        /// <summary>
+        /// Move an item to another place in the list
+        /// </summary>
+        /// <param name="item">Item to mvoe</param>
+        /// <param name="target">Target index of the item</param>
+        public void Move(T item, int target)
+        {
+            var source = UnderlyingCollection.IndexOf(item);
+            if (source != target)
+            {
+                UnderlyingCollection.Insert(target, item);
+                if (source < target)
+                    UnderlyingCollection.RemoveAt(source);
+                else
+                    UnderlyingCollection.RemoveAt(source + 1);
+                CollectionChanged?.Invoke(this, new NotifyCollectionChangedEventArgs(NotifyCollectionChangedAction.Move, item, target, source));
+            }
+        }
+
         public bool Remove(T item)
         {
             var index = IndexOf(item);
