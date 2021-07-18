@@ -90,10 +90,11 @@ namespace Wildgoat.WPFUtility.Collections
 
                 case NotifyCollectionChangedAction.Remove:
                     {
-                        filtered.RemoveRange(e.OldStartingIndex, e.OldItems.Cast<object?>().Select(item => filter(item)).Count());
-                        var items = e.OldItems.Cast<object?>().Where(item => filter(item));
-                        if (items.Any())
-                            CollectionChanged?.Invoke(this, new NotifyCollectionChangedEventArgs(NotifyCollectionChangedAction.Remove, items.ToList(), GetFilteredIndex(e.OldStartingIndex)));
+                        var items = e.OldItems.Cast<object?>();
+                        var filteredItems = items.Where((item, index) => filtered[index + e.OldStartingIndex]);
+                        if (filteredItems.Any())
+                            CollectionChanged?.Invoke(this, new NotifyCollectionChangedEventArgs(NotifyCollectionChangedAction.Remove, filteredItems.ToList(), GetFilteredIndex(e.OldStartingIndex)));
+                        filtered.RemoveRange(e.OldStartingIndex, items.Count());
                     }
                     break;
 
