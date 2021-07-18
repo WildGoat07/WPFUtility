@@ -70,7 +70,7 @@ namespace Wildgoat.WPFUtility.Collections
                                 break;
 
                             case NotifyCollectionChangedAction.Move:
-                                CollectionChanged?.Invoke(this, new NotifyCollectionChangedEventArgs(NotifyCollectionChangedAction.Replace, e.NewItems, e.NewStartingIndex + offset, e.OldStartingIndex + offset));
+                                CollectionChanged?.Invoke(this, new NotifyCollectionChangedEventArgs(NotifyCollectionChangedAction.Move, e.NewItems, e.NewStartingIndex + offset, e.OldStartingIndex + offset));
                                 break;
                         }
                     }
