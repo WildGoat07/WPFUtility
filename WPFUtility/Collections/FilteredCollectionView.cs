@@ -8,6 +8,9 @@ using System.Linq;
 
 namespace Wildgoat.WPFUtility.Collections
 {
+    /// <summary>
+    /// A collection view that filters an underlying collection
+    /// </summary>
     public class FilteredCollectionView : IBaseCollectionSource, IEnumerable<object?>, IEnumerable, INotifyCollectionChanged, INotifyPropertyChanged
     {
         private Predicate<object?> filter;
@@ -33,6 +36,9 @@ namespace Wildgoat.WPFUtility.Collections
 
         public event PropertyChangedEventHandler? PropertyChanged;
 
+        /// <summary>
+        /// Filter used on the underlying collection
+        /// </summary>
         public Predicate<object?> Filter
         {
             get => filter;
@@ -46,6 +52,9 @@ namespace Wildgoat.WPFUtility.Collections
             }
         }
 
+        /// <summary>
+        /// The underlying list
+        /// </summary>
         public IBaseCollectionSource Source
         {
             get => source;
@@ -92,11 +101,11 @@ namespace Wildgoat.WPFUtility.Collections
                     {
                         for (int i = 0; i < e.OldItems.Count; ++i)
                         {
-                            filtered[e.NewStartingIndex + i] = filter(e.NewItems[i]);
                             var oldItem = e.OldItems[i];
                             var newItem = e.NewItems[i];
-                            var oldFiltered = filter(oldItem);
-                            var newFiltered = filter(newItem);
+                            var oldFiltered = filtered[e.NewStartingIndex + i];
+                            filtered[e.NewStartingIndex + i] = filter(e.NewItems[i]);
+                            var newFiltered = filtered[e.NewStartingIndex + i];
                             if (oldFiltered && newFiltered)
                                 CollectionChanged?.Invoke(this, new NotifyCollectionChangedEventArgs(NotifyCollectionChangedAction.Replace, newItem, oldItem, GetFilteredIndex(e.NewStartingIndex + i)));
                             else if (oldFiltered)
