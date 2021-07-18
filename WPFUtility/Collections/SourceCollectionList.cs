@@ -65,6 +65,34 @@ namespace Wildgoat.WPFUtility.Collections
             }
         }
 
+        public T this[Index index]
+        {
+            get => index.IsFromEnd
+                ? UnderlyingCollection[UnderlyingCollection.Count - index.Value]
+                : UnderlyingCollection[index.Value];
+            set
+            {
+                var integerIndex = index.IsFromEnd
+                    ? UnderlyingCollection.Count - index.Value
+                    : index.Value;
+                var oldValue = UnderlyingCollection[integerIndex];
+                UnderlyingCollection[integerIndex] = value;
+                CollectionChanged?.Invoke(this, new NotifyCollectionChangedEventArgs(NotifyCollectionChangedAction.Replace, value, oldValue, integerIndex));
+            }
+        }
+
+        public T[] this[Range range]
+        {
+            get
+            {
+                var (start, size) = range.GetOffsetAndLength(UnderlyingCollection.Count);
+                var array = new T[size];
+                for (int i = 0; i < size; ++i)
+                    array[i] = UnderlyingCollection[i + start];
+                return array;
+            }
+        }
+
         public void Add(T item)
         {
             UnderlyingCollection.Add(item);
