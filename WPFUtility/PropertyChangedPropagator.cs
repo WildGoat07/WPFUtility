@@ -17,11 +17,13 @@ namespace Wildgoat.WPFUtility
         public PropertyChangedPropagator()
         {
             NotifyPropertyChangedProperties = GetType().GetProperties()
-                .Where(property => property.PropertyType.GetInterface(nameof(INotifyPropertyChanged)) != null)
+                .Where(property => property.GetCustomAttribute(typeof(PropagatorIgnoreAttribute)) is null
+                    && property.PropertyType.GetInterface(nameof(INotifyPropertyChanged)) != null)
                 .Select<PropertyInfo, (PropertyInfo, INotifyPropertyChanged?)>(property => (property, null))
                 .ToDictionary(property => property.Item1.Name);
             NotifyCollectionChangedProperties = GetType().GetProperties()
-                .Where(property => property.PropertyType.GetInterface(nameof(INotifyCollectionChanged)) != null)
+                .Where(property => property.GetCustomAttribute(typeof(PropagatorIgnoreAttribute)) is null
+                    && property.PropertyType.GetInterface(nameof(INotifyCollectionChanged)) != null)
                 .Select<PropertyInfo, (PropertyInfo, INotifyCollectionChanged?)>(property => (property, null))
                 .ToDictionary(property => property.Item1.Name);
         }
