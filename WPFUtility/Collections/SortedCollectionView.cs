@@ -62,11 +62,10 @@ namespace Wildgoat.WPFUtility.Collections
             set
             {
                 UnlinkSource();
-                CollectionChanged?.Invoke(this, new NotifyCollectionChangedEventArgs(NotifyCollectionChangedAction.Remove, sortedBuffer.ToList()));
                 source = value;
-                Initialize();
                 LinkSource();
                 PropertyChanged?.Invoke(this, new PropertyChangedEventArgs(nameof(Source)));
+                Initialize();
             }
         }
 
@@ -77,7 +76,7 @@ namespace Wildgoat.WPFUtility.Collections
         private void Initialize()
         {
             if (sortedBuffer.Any())
-                CollectionChanged?.Invoke(this, new NotifyCollectionChangedEventArgs(NotifyCollectionChangedAction.Remove, sortedBuffer.ToList()));
+                CollectionChanged?.Invoke(this, new NotifyCollectionChangedEventArgs(NotifyCollectionChangedAction.Remove, sortedBuffer.ToList(), 0));
             sortedBuffer.Clear();
             foreach (var item in source)
             {
@@ -94,7 +93,7 @@ namespace Wildgoat.WPFUtility.Collections
                 else
                     sortedBuffer.AddBefore(current, item);
             }
-            CollectionChanged?.Invoke(this, new NotifyCollectionChangedEventArgs(NotifyCollectionChangedAction.Add, sortedBuffer.ToList()));
+            CollectionChanged?.Invoke(this, new NotifyCollectionChangedEventArgs(NotifyCollectionChangedAction.Add, sortedBuffer.ToList(), 0));
         }
 
         private void LinkSource()
