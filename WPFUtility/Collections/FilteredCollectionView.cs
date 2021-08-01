@@ -5,6 +5,7 @@ using System.Collections.Specialized;
 using System.ComponentModel;
 using System.Text;
 using System.Linq;
+using System.Windows;
 
 namespace Wildgoat.WPFUtility.Collections
 {
@@ -70,7 +71,16 @@ namespace Wildgoat.WPFUtility.Collections
             }
         }
 
-        public IEnumerator<object?> GetEnumerator() => new Enumerator(this);
+        public IEnumerator<object?> GetEnumerator()
+        {
+            int i = 0;
+            foreach (var item in source)
+            {
+                if (filtered[i])
+                    yield return item;
+                ++i;
+            }
+        }
 
         IEnumerator IEnumerable.GetEnumerator() => GetEnumerator();
 
@@ -91,10 +101,11 @@ namespace Wildgoat.WPFUtility.Collections
                 case NotifyCollectionChangedAction.Remove:
                     {
                         var items = e.OldItems.Cast<object?>();
-                        var filteredItems = items.Where((item, index) => filtered[index + e.OldStartingIndex]);
-                        if (filteredItems.Any())
-                            CollectionChanged?.Invoke(this, new NotifyCollectionChangedEventArgs(NotifyCollectionChangedAction.Remove, filteredItems.ToList(), GetFilteredIndex(e.OldStartingIndex)));
+                        var filteredItems = items.Where((item, index) => filtered[index + e.OldStartingIndex]).ToArray();
+                        var internalIndex = GetFilteredIndex(e.OldStartingIndex);
                         filtered.RemoveRange(e.OldStartingIndex, items.Count());
+                        if (filteredItems.Any())
+                            CollectionChanged?.Invoke(this, new NotifyCollectionChangedEventArgs(NotifyCollectionChangedAction.Remove, filteredItems.ToList(), internalIndex));
                     }
                     break;
 
@@ -168,39 +179,6 @@ namespace Wildgoat.WPFUtility.Collections
         private void UnlinkSource()
         {
             source.CollectionChanged -= OnSourceCollectionChanged;
-        }
-
-        private class Enumerator : IEnumerator<object?>, IEnumerator
-        {
-            private int index;
-
-            public Enumerator(FilteredCollectionView source)
-            {
-                Source = source;
-            }
-
-            public object? Current => UnderlyingEnumerator?.Current;
-            private FilteredCollectionView Source { get; }
-            private IEnumerator? UnderlyingEnumerator { get; set; }
-
-            public void Dispose()
-            {
-            }
-
-            public bool MoveNext()
-            {
-                if (UnderlyingEnumerator == null)
-                    UnderlyingEnumerator = Source.source.GetEnumerator();
-                while (UnderlyingEnumerator.MoveNext())
-                    if (Source.filtered[index++])
-                        return true;
-                return false;
-            }
-
-            public void Reset()
-            {
-                UnderlyingEnumerator = null;
-            }
         }
     }
 }
