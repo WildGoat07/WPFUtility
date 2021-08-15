@@ -18,9 +18,9 @@ namespace Wildgoat.WPFUtility.Collections
     {
         private IBaseCollectionSource source;
 
-        public ExtendableCollectionView(IBaseCollectionSource source)
+        public ExtendableCollectionView(object source)
         {
-            this.source = source;
+            this.source = CollectionSourceWrapper.GetCollection(source);
             LinkSource();
         }
 
@@ -33,14 +33,14 @@ namespace Wildgoat.WPFUtility.Collections
 
         public event PropertyChangedEventHandler? PropertyChanged;
 
-        public IBaseCollectionSource Source
+        public object Source
         {
             get => source;
             set
             {
                 CollectionChanged?.Invoke(this, new NotifyCollectionChangedEventArgs(NotifyCollectionChangedAction.Remove, this.ToList(), 0));
                 UnlinkSource();
-                source = value;
+                source = CollectionSourceWrapper.GetCollection(value);
                 LinkSource();
                 CollectionChanged?.Invoke(this, new NotifyCollectionChangedEventArgs(NotifyCollectionChangedAction.Add, this.ToList(), 0));
                 PropertyChanged?.Invoke(this, new PropertyChangedEventArgs(nameof(Source)));

@@ -12,9 +12,9 @@ namespace Wildgoat.WPFUtility.Collections
     {
         private IBaseCollectionSource[] sources;
 
-        public ConcatenatedCollectionsView(params IBaseCollectionSource[] sources)
+        public ConcatenatedCollectionsView(params object[] sources)
         {
-            this.sources = sources;
+            this.sources = sources.Select(source => CollectionSourceWrapper.GetCollection(source)).ToArray();
             InitSources();
         }
 
@@ -27,14 +27,14 @@ namespace Wildgoat.WPFUtility.Collections
 
         public event PropertyChangedEventHandler? PropertyChanged;
 
-        public IBaseCollectionSource[] Sources
+        public object[] Sources
         {
             get => sources;
             set
             {
                 UnlinkSources();
                 CollectionChanged?.Invoke(this, new NotifyCollectionChangedEventArgs(NotifyCollectionChangedAction.Remove, sources.Select(source => source.Cast<object?>()).SelectMany(source => source).ToList(), 0));
-                sources = value;
+                sources = value.Select(source => CollectionSourceWrapper.GetCollection(source)).ToArray();
                 InitSources();
                 CollectionChanged?.Invoke(this, new NotifyCollectionChangedEventArgs(NotifyCollectionChangedAction.Add, sources.Select(source => source.Cast<object?>()).SelectMany(source => source).ToList(), 0));
                 PropertyChanged?.Invoke(this, new PropertyChangedEventArgs(nameof(Sources)));
@@ -121,7 +121,7 @@ namespace Wildgoat.WPFUtility.Collections
             {
                 if (EnumerableEnumerator == null)
                 {
-                    EnumerableEnumerator = Source.Sources.AsEnumerable().GetEnumerator();
+                    EnumerableEnumerator = Source.Sources.Cast<IBaseCollectionSource>().GetEnumerator();
                     UnderLyingEnumerator = null;
                 }
                 if (EnumerableEnumerator != null)

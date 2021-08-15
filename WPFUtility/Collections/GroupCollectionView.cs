@@ -17,10 +17,10 @@ namespace Wildgoat.WPFUtility.Collections
 
         private IBaseCollectionSource source;
 
-        public GroupCollectionView(Func<object?, object> keySelector, IBaseCollectionSource source)
+        public GroupCollectionView(Func<object?, object> keySelector, object source)
         {
             buffer = new List<GroupItemView>();
-            this.source = source;
+            this.source = CollectionSourceWrapper.GetCollection(source);
             this.keySelector = keySelector;
             LinkSource();
         }
@@ -28,7 +28,7 @@ namespace Wildgoat.WPFUtility.Collections
         ~GroupCollectionView()
         {
             foreach (var group in buffer)
-                group.Values.CollectionChanged -= OnFilteredGroupChanged;
+                group.values.CollectionChanged -= OnFilteredGroupChanged;
             UnlinkSource();
         }
 
@@ -36,13 +36,13 @@ namespace Wildgoat.WPFUtility.Collections
 
         public event PropertyChangedEventHandler? PropertyChanged;
 
-        public IBaseCollectionSource Source
+        public object Source
         {
             get => source;
             set
             {
                 UnlinkSource();
-                source = value;
+                source = CollectionSourceWrapper.GetCollection(value);
                 LinkSource();
                 Initialize();
                 PropertyChanged?.Invoke(this, new PropertyChangedEventArgs(nameof(Source)));
@@ -81,11 +81,11 @@ namespace Wildgoat.WPFUtility.Collections
                     {
                         var key = keySelector(item);
                         var group = buffer.First(g => g.Key == key);
-                        if (!group.Values.GetEnumerator().MoveNext())
+                        if (!group.values.GetEnumerator().MoveNext())
                         {
                             var index = buffer.IndexOf(group);
                             buffer.Remove(group);
-                            group.Values.CollectionChanged -= OnFilteredGroupChanged;
+                            group.values.CollectionChanged -= OnFilteredGroupChanged;
                             CollectionChanged?.Invoke(this, new NotifyCollectionChangedEventArgs(NotifyCollectionChangedAction.Remove, group, index));
                         }
                     }
@@ -102,7 +102,7 @@ namespace Wildgoat.WPFUtility.Collections
                         if (oldKey != newKey)
                         {
                             var oldGroup = buffer.First(g => g.Key == oldKey);
-                            if (!oldGroup.Values.GetEnumerator().MoveNext())
+                            if (!oldGroup.values.GetEnumerator().MoveNext())
                             {
                                 var index = buffer.IndexOf(oldGroup);
                                 buffer.Remove(oldGroup);
@@ -131,7 +131,7 @@ namespace Wildgoat.WPFUtility.Collections
                         if (!buffer.Any(g => g.Key == key))
                         {
                             var group = new GroupItemView(key, new FilteredCollectionView(source, item => key == keySelector(item)));
-                            group.Values.CollectionChanged += OnFilteredGroupChanged;
+                            group.values.CollectionChanged += OnFilteredGroupChanged;
                             buffer.Add(group);
                             CollectionChanged?.Invoke(this, new NotifyCollectionChangedEventArgs(NotifyCollectionChangedAction.Add, group, buffer.IndexOf(group)));
                         }
@@ -151,11 +151,12 @@ namespace Wildgoat.WPFUtility.Collections
         internal GroupItemView(object key, IBaseCollectionSource values)
         {
             Key = key;
-            Values = values;
+            this.values = values;
         }
 
         public object Key { get; }
-        public IBaseCollectionSource Values { get; }
+        public object Values => values;
+        internal IBaseCollectionSource values { get; }
 
         public static bool operator !=(GroupItemView? left, GroupItemView? right)
         {

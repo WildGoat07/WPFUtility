@@ -14,16 +14,16 @@ namespace Wildgoat.WPFUtility.Collections
         private IEqualityComparer? comparer;
         private IBaseCollectionSource source;
 
-        public SetCollectionView(IBaseCollectionSource source, IEqualityComparer? comparer)
+        public SetCollectionView(object source, IEqualityComparer? comparer)
         {
-            this.source = source;
+            this.source = CollectionSourceWrapper.GetCollection(source);
             this.comparer = comparer;
             Hashes = new List<int>();
             InitSource();
             LinkSource();
         }
 
-        public SetCollectionView(IBaseCollectionSource source) : this(source, null)
+        public SetCollectionView(object source) : this(source, null)
         {
         }
 
@@ -49,14 +49,14 @@ namespace Wildgoat.WPFUtility.Collections
             }
         }
 
-        public IBaseCollectionSource Source
+        public object Source
         {
             get => source;
             set
             {
                 CollectionChanged?.Invoke(this, new NotifyCollectionChangedEventArgs(NotifyCollectionChangedAction.Remove, this.ToList(), 0));
                 UnlinkSource();
-                source = value;
+                source = CollectionSourceWrapper.GetCollection(value);
                 InitSource();
                 LinkSource();
                 CollectionChanged?.Invoke(this, new NotifyCollectionChangedEventArgs(NotifyCollectionChangedAction.Add, this.ToList(), 0));

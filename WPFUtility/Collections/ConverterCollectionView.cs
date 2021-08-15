@@ -18,9 +18,9 @@ namespace Wildgoat.WPFUtility.Collections
         private List<object?> internalBuffer;
         private IBaseCollectionSource source;
 
-        public ConverterCollectionView(IBaseCollectionSource source, Func<object?, object?> converter)
+        public ConverterCollectionView(object source, Func<object?, object?> converter)
         {
-            this.source = source;
+            this.source = CollectionSourceWrapper.GetCollection(source);
             this.converter = converter;
             internalBuffer = new List<object?>();
             LinkSource();
@@ -53,13 +53,13 @@ namespace Wildgoat.WPFUtility.Collections
         /// <summary>
         /// Source collection to map to the target type
         /// </summary>
-        public IBaseCollectionSource Source
+        public object Source
         {
             get => source;
             set
             {
                 UnlinkSource();
-                source = value;
+                source = CollectionSourceWrapper.GetCollection(value);
                 Initialize();
                 LinkSource();
                 PropertyChanged?.Invoke(this, new PropertyChangedEventArgs(nameof(Source)));

@@ -9,7 +9,7 @@ namespace Wildgoat.WPFUtility.Collections
     /// <summary>
     /// Base interface compatible with the library
     /// </summary>
-    public interface IBaseCollectionSource : IEnumerable, INotifyCollectionChanged
+    internal interface IBaseCollectionSource : IEnumerable, INotifyCollectionChanged
     {
     }
 }

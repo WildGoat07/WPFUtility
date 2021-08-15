@@ -9,26 +9,25 @@ using System.Text;
 
 namespace Wildgoat.WPFUtility.Collections
 {
-    public class CollectionSourceWrapper<T> : IBaseCollectionSource, IEnumerable<object?>, IEnumerable, INotifyCollectionChanged
+    internal class CollectionSourceWrapper : IBaseCollectionSource, IEnumerable<object?>, IEnumerable, INotifyCollectionChanged
     {
         private List<object?> buffer;
-        private ObservableCollection<T> source;
-        private bool triggerItemChange;
+        private object source;
 
         /// <summary>
         ///
         /// </summary>
         /// <param name="source"></param>
-        public CollectionSourceWrapper(ObservableCollection<T> source)
+        internal CollectionSourceWrapper(object source)
         {
             this.source = source;
-            buffer = new List<object?>(source.Cast<object?>());
-            source.CollectionChanged += OnSourceCollectionChanged;
+            buffer = new List<object?>(((IEnumerable)source).Cast<object?>());
+            ((INotifyCollectionChanged)source).CollectionChanged += OnSourceCollectionChanged;
         }
 
         ~CollectionSourceWrapper()
         {
-            source.CollectionChanged -= OnSourceCollectionChanged;
+            ((INotifyCollectionChanged)source).CollectionChanged -= OnSourceCollectionChanged;
         }
 
         public event NotifyCollectionChangedEventHandler? CollectionChanged;
@@ -36,6 +35,16 @@ namespace Wildgoat.WPFUtility.Collections
         IEnumerator<object?> IEnumerable<object?>.GetEnumerator() => buffer.GetEnumerator();
 
         IEnumerator IEnumerable.GetEnumerator() => buffer.GetEnumerator();
+
+        internal static IBaseCollectionSource GetCollection(object source)
+        {
+            if (source is IBaseCollectionSource collection)
+                return collection;
+            else if (source is INotifyCollectionChanged && source is IEnumerable)
+                return new CollectionSourceWrapper(source);
+            else
+                throw new InvalidOperationException("The source is not valid");
+        }
 
         private void OnSourceCollectionChanged(object sender, NotifyCollectionChangedEventArgs e)
         {

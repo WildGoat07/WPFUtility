@@ -19,9 +19,9 @@ namespace Wildgoat.WPFUtility.Collections
 
         private IBaseCollectionSource source;
 
-        public FilteredCollectionView(IBaseCollectionSource source, Predicate<object?> filter)
+        public FilteredCollectionView(object source, Predicate<object?> filter)
         {
-            this.source = source;
+            this.source = CollectionSourceWrapper.GetCollection(source);
             this.filter = filter;
             filtered = new List<bool>();
             LinkSource();
@@ -56,14 +56,14 @@ namespace Wildgoat.WPFUtility.Collections
         /// <summary>
         /// The underlying list
         /// </summary>
-        public IBaseCollectionSource Source
+        public object Source
         {
             get => source;
             set
             {
                 CollectionChanged?.Invoke(this, new NotifyCollectionChangedEventArgs(NotifyCollectionChangedAction.Remove, this.ToList(), 0));
                 UnlinkSource();
-                source = value;
+                source = CollectionSourceWrapper.GetCollection(value);
                 InitSource();
                 LinkSource();
                 CollectionChanged?.Invoke(this, new NotifyCollectionChangedEventArgs(NotifyCollectionChangedAction.Add, this.ToList(), 0));

@@ -17,19 +17,19 @@ namespace Wildgoat.WPFUtility.Collections
         private LinkedList<object?> sortedBuffer;
         private IBaseCollectionSource source;
 
-        public SortedCollectionView(IBaseCollectionSource source, Comparison<object?> comparer)
+        public SortedCollectionView(object source, Comparison<object?> comparer)
         {
             sortedBuffer = new LinkedList<object?>();
-            this.source = source;
+            this.source = CollectionSourceWrapper.GetCollection(source);
             this.comparer = Comparer<object?>.Create(comparer);
             Initialize();
             LinkSource();
         }
 
-        public SortedCollectionView(IBaseCollectionSource source, IComparer comparer)
+        public SortedCollectionView(object source, IComparer comparer)
         {
             sortedBuffer = new LinkedList<object?>();
-            this.source = source;
+            this.source = CollectionSourceWrapper.GetCollection(source);
             this.comparer = comparer;
             Initialize();
             LinkSource();
@@ -61,13 +61,13 @@ namespace Wildgoat.WPFUtility.Collections
         /// <summary>
         /// Source collection to be sorted
         /// </summary>
-        public IBaseCollectionSource Source
+        public object Source
         {
             get => source;
             set
             {
                 UnlinkSource();
-                source = value;
+                source = CollectionSourceWrapper.GetCollection(value);
                 Initialize();
                 LinkSource();
                 PropertyChanged?.Invoke(this, new PropertyChangedEventArgs(nameof(Source)));
