@@ -9,7 +9,7 @@ namespace Wildgoat.WPFUtility.Collections
 {
     public static class Extensions
     {
-        public static IBaseCollectionSource AsBaseCollectionSource<T>(this ObservableCollection<T> array, bool triggerItemChanges = true)
-            => new CollectionSourceWrapper<T>(array, triggerItemChanges);
+        public static IBaseCollectionSource AsBaseCollectionSource<T>(this ObservableCollection<T> array)
+            => new CollectionSourceWrapper<T>(array);
     }
 }

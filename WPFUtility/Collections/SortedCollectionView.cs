@@ -35,6 +35,11 @@ namespace Wildgoat.WPFUtility.Collections
             LinkSource();
         }
 
+        ~SortedCollectionView()
+        {
+            UnlinkSource();
+        }
+
         public event NotifyCollectionChangedEventHandler? CollectionChanged;
 
         public event PropertyChangedEventHandler? PropertyChanged;

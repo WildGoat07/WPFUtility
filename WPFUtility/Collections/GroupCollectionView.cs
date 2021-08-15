@@ -29,6 +29,7 @@ namespace Wildgoat.WPFUtility.Collections
         {
             foreach (var group in buffer)
                 group.Values.CollectionChanged -= OnFilteredGroupChanged;
+            UnlinkSource();
         }
 
         public event NotifyCollectionChangedEventHandler? CollectionChanged;

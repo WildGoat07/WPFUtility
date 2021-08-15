@@ -19,25 +19,15 @@ namespace Wildgoat.WPFUtility.Collections
         ///
         /// </summary>
         /// <param name="source"></param>
-        /// <param name="triggerItemChange"></param>
-        public CollectionSourceWrapper(ObservableCollection<T> source, bool triggerItemChange = true)
+        public CollectionSourceWrapper(ObservableCollection<T> source)
         {
             this.source = source;
-            this.triggerItemChange = triggerItemChange;
             buffer = new List<object?>(source.Cast<object?>());
-            if (triggerItemChange)
-                foreach (var item in source)
-                    if (item is INotifyPropertyChanged notifier)
-                        notifier.PropertyChanged += OnItemPropertyChanged;
             source.CollectionChanged += OnSourceCollectionChanged;
         }
 
         ~CollectionSourceWrapper()
         {
-            if (triggerItemChange)
-                foreach (var item in buffer)
-                    if (item is INotifyPropertyChanged notifier)
-                        notifier.PropertyChanged -= OnItemPropertyChanged;
             source.CollectionChanged -= OnSourceCollectionChanged;
         }
 
@@ -47,31 +37,17 @@ namespace Wildgoat.WPFUtility.Collections
 
         IEnumerator IEnumerable.GetEnumerator() => buffer.GetEnumerator();
 
-        private void OnItemPropertyChanged(object sender, PropertyChangedEventArgs e)
-        {
-            var index = buffer.IndexOf(sender);
-            CollectionChanged?.Invoke(this, new NotifyCollectionChangedEventArgs(NotifyCollectionChangedAction.Replace, sender, sender, index));
-        }
-
         private void OnSourceCollectionChanged(object sender, NotifyCollectionChangedEventArgs e)
         {
             switch (e.Action)
             {
                 case NotifyCollectionChangedAction.Add:
                     buffer.InsertRange(e.NewStartingIndex, e.NewItems.Cast<object?>());
-                    if (triggerItemChange)
-                        foreach (var item in e.NewItems)
-                            if (item is INotifyPropertyChanged notifier)
-                                notifier.PropertyChanged += OnItemPropertyChanged;
                     CollectionChanged?.Invoke(this, e);
                     break;
 
                 case NotifyCollectionChangedAction.Remove:
                     buffer.RemoveRange(e.OldStartingIndex, e.OldItems.Count);
-                    if (triggerItemChange)
-                        foreach (var item in e.OldItems)
-                            if (item is INotifyPropertyChanged notifier)
-                                notifier.PropertyChanged -= OnItemPropertyChanged;
                     CollectionChanged?.Invoke(this, e);
                     break;
 
@@ -81,13 +57,6 @@ namespace Wildgoat.WPFUtility.Collections
                         var item = e.NewItems[i];
                         var oldItem = buffer[i + e.NewStartingIndex];
                         buffer[i + e.NewStartingIndex] = item;
-                        if (triggerItemChange)
-                        {
-                            if (oldItem is INotifyPropertyChanged oldNotifier)
-                                oldNotifier.PropertyChanged -= OnItemPropertyChanged;
-                            if (item is INotifyPropertyChanged newNotifier)
-                                newNotifier.PropertyChanged += OnItemPropertyChanged;
-                        }
                     }
                     CollectionChanged?.Invoke(this, e);
                     break;
@@ -104,10 +73,6 @@ namespace Wildgoat.WPFUtility.Collections
 
                 case NotifyCollectionChangedAction.Reset:
                     var removed = buffer.ToList();
-                    if (triggerItemChange)
-                        foreach (var item in buffer)
-                            if (item is INotifyPropertyChanged notifier)
-                                notifier.PropertyChanged -= OnItemPropertyChanged;
                     buffer.Clear();
                     if (e.NewItems != null)
                         buffer.AddRange(e.NewItems.Cast<object?>());
