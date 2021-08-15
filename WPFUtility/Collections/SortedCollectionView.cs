@@ -63,9 +63,9 @@ namespace Wildgoat.WPFUtility.Collections
             {
                 UnlinkSource();
                 source = value;
+                Initialize();
                 LinkSource();
                 PropertyChanged?.Invoke(this, new PropertyChangedEventArgs(nameof(Source)));
-                Initialize();
             }
         }
 
@@ -178,7 +178,8 @@ namespace Wildgoat.WPFUtility.Collections
                             else
                                 sortedBuffer.AddBefore(current, newItem);
                             CollectionChanged?.Invoke(this, new NotifyCollectionChangedEventArgs(NotifyCollectionChangedAction.Replace, newItem, oldItem, replaceIndex));
-                            CollectionChanged?.Invoke(this, new NotifyCollectionChangedEventArgs(NotifyCollectionChangedAction.Move, newItem, index, replaceIndex));
+                            if (index != replaceIndex)
+                                CollectionChanged?.Invoke(this, new NotifyCollectionChangedEventArgs(NotifyCollectionChangedAction.Move, newItem, index, replaceIndex));
                         }
                     }
                     break;

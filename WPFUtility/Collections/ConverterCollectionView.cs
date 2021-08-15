@@ -55,9 +55,9 @@ namespace Wildgoat.WPFUtility.Collections
             {
                 UnlinkSource();
                 source = value;
+                Initialize();
                 LinkSource();
                 PropertyChanged?.Invoke(this, new PropertyChangedEventArgs(nameof(Source)));
-                Initialize();
             }
         }
 

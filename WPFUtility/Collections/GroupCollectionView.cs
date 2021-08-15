@@ -9,7 +9,7 @@ using System.Windows;
 
 namespace Wildgoat.WPFUtility.Collections
 {
-    public class GroupCollectionView : IBaseCollectionSource, IEnumerable<GroupItemView>, IEnumerable, INotifyCollectionChanged
+    public class GroupCollectionView : IBaseCollectionSource, IEnumerable<GroupItemView>, IEnumerable, INotifyCollectionChanged, INotifyPropertyChanged
     {
         private List<GroupItemView> buffer;
 
@@ -33,6 +33,8 @@ namespace Wildgoat.WPFUtility.Collections
 
         public event NotifyCollectionChangedEventHandler? CollectionChanged;
 
+        public event PropertyChangedEventHandler? PropertyChanged;
+
         public IBaseCollectionSource Source
         {
             get => source;
@@ -42,6 +44,7 @@ namespace Wildgoat.WPFUtility.Collections
                 source = value;
                 LinkSource();
                 Initialize();
+                PropertyChanged?.Invoke(this, new PropertyChangedEventArgs(nameof(Source)));
             }
         }
 

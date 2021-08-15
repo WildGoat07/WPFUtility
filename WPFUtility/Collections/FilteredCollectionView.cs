@@ -64,8 +64,8 @@ namespace Wildgoat.WPFUtility.Collections
                 CollectionChanged?.Invoke(this, new NotifyCollectionChangedEventArgs(NotifyCollectionChangedAction.Remove, this.ToList(), 0));
                 UnlinkSource();
                 source = value;
-                LinkSource();
                 InitSource();
+                LinkSource();
                 CollectionChanged?.Invoke(this, new NotifyCollectionChangedEventArgs(NotifyCollectionChangedAction.Add, this.ToList(), 0));
                 PropertyChanged?.Invoke(this, new PropertyChangedEventArgs(nameof(Source)));
             }
