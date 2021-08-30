@@ -78,32 +78,19 @@ namespace Wildgoat.WPFUtility
     /// <summary>
     /// Arguments of the callback method
     /// </summary>
-    public class CallbackEventArgs : EventArgs
+    public class CallbackEventArgs : ValueChangedEventArgs<object>
     {
-#pragma warning disable CS8618
-
-#pragma warning disable CS8600
-
+#pragma warning disable CS8604
         /// <summary>
         /// Constructor
         /// </summary>
         /// <param name="oldValue">Previous value, before it is changed</param>
         /// <param name="newValue">value, after the object is changed</param>
-        public CallbackEventArgs(object? oldValue, object? newValue) => (OldValue, NewValue) = (oldValue, newValue);
 
-#pragma warning restore CS8600
+        public CallbackEventArgs(object? oldValue, object? newValue) : base(oldValue, newValue)
+        { }
 
-#pragma warning restore CS8618
-
-        /// <summary>
-        /// Previous value, before it is changed
-        /// </summary>
-        public object NewValue { get; }
-
-        /// <summary>
-        /// Next value, after the object is changed
-        /// </summary>
-        public object OldValue { get; }
+#pragma warning restore CS8604
     }
 
     /// <summary>

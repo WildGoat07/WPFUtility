@@ -2,7 +2,7 @@
 using System.Collections.Generic;
 using System.Text;
 
-namespace Wildgoat.WPFUtility.ActionIcon
+namespace Wildgoat.WPFUtility.Controls
 {
     public class IconChangedEventArgs : ValueChangedEventArgs<Icon?>
     {

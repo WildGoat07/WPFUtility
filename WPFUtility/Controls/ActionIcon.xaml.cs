@@ -14,7 +14,7 @@ using System.Windows.Media.Imaging;
 using System.Windows.Navigation;
 using System.Windows.Shapes;
 
-namespace Wildgoat.WPFUtility.ActionIcon
+namespace Wildgoat.WPFUtility.Controls
 {
     public partial class ActionIcon : UserControl
     {
