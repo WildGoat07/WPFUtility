@@ -15,10 +15,12 @@
     <None Remove="Controls\icons\Edit.png" />
     <None Remove="Controls\icons\Edit_reverse.png" />
     <None Remove="Controls\icons\Error.png" />
+    <None Remove="Controls\icons\ExtLink.png" />
     <None Remove="Controls\icons\Find.png" />
     <None Remove="Controls\icons\Help.png" />
     <None Remove="Controls\icons\Import.png" />
     <None Remove="Controls\icons\Info.png" />
+    <None Remove="Controls\icons\Link.png" />
     <None Remove="Controls\icons\Lock.png" />
     <None Remove="Controls\icons\New.png" />
     <None Remove="Controls\icons\Next.png" />
@@ -51,10 +53,12 @@
     <Resource Include="Controls\icons\Edit.png" />
     <Resource Include="Controls\icons\Edit_reverse.png" />
     <Resource Include="Controls\icons\Error.png" />
+    <Resource Include="Controls\icons\ExtLink.png" />
     <Resource Include="Controls\icons\Find.png" />
     <Resource Include="Controls\icons\Help.png" />
     <Resource Include="Controls\icons\Import.png" />
     <Resource Include="Controls\icons\Info.png" />
+    <Resource Include="Controls\icons\Link.png" />
     <Resource Include="Controls\icons\Lock.png" />
     <Resource Include="Controls\icons\New.png" />
     <Resource Include="Controls\icons\Next.png" />

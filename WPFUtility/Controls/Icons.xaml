@@ -2,101 +2,107 @@
                     xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml">
     <BitmapImage
         x:Key="Add"
-        UriSource="/WPFUtility;component/ActionIcon/icons/Add.png" />
+        UriSource="/WPFUtility;component/Controls/icons/Add.png" />
     <BitmapImage
         x:Key="Alert"
-        UriSource="/WPFUtility;component/ActionIcon/icons/Alert.png" />
+        UriSource="/WPFUtility;component/Controls/icons/Alert.png" />
     <BitmapImage
         x:Key="Delete"
-        UriSource="/WPFUtility;component/ActionIcon/icons/Delete.png" />
+        UriSource="/WPFUtility;component/Controls/icons/Delete.png" />
     <BitmapImage
         x:Key="Download"
-        UriSource="/WPFUtility;component/ActionIcon/icons/Download.png" />
+        UriSource="/WPFUtility;component/Controls/icons/Download.png" />
     <BitmapImage
         x:Key="Edit"
-        UriSource="/WPFUtility;component/ActionIcon/icons/Edit.png" />
+        UriSource="/WPFUtility;component/Controls/icons/Edit.png" />
     <BitmapImage
         x:Key="EditReverse"
-        UriSource="/WPFUtility;component/ActionIcon/icons/Edit_reverse.png" />
+        UriSource="/WPFUtility;component/Controls/icons/Edit_reverse.png" />
     <BitmapImage
         x:Key="Error"
-        UriSource="/WPFUtility;component/ActionIcon/icons/Error.png" />
+        UriSource="/WPFUtility;component/Controls/icons/Error.png" />
+    <BitmapImage
+        x:Key="ExtLink"
+        UriSource="/WPFUtility;component/Controls/icons/ExtLink.png" />
     <BitmapImage
         x:Key="Find"
-        UriSource="/WPFUtility;component/ActionIcon/icons/Find.png" />
+        UriSource="/WPFUtility;component/Controls/icons/Find.png" />
     <BitmapImage
         x:Key="Help"
-        UriSource="/WPFUtility;component/ActionIcon/icons/Help.png" />
+        UriSource="/WPFUtility;component/Controls/icons/Help.png" />
     <BitmapImage
         x:Key="Import"
-        UriSource="/WPFUtility;component/ActionIcon/icons/Import.png" />
+        UriSource="/WPFUtility;component/Controls/icons/Import.png" />
     <BitmapImage
         x:Key="Info"
-        UriSource="/WPFUtility;component/ActionIcon/icons/Info.png" />
+        UriSource="/WPFUtility;component/Controls/icons/Info.png" />
     <BitmapImage
         x:Key="Lock"
-        UriSource="/WPFUtility;component/ActionIcon/icons/Lock.png" />
+        UriSource="/WPFUtility;component/Controls/icons/Lock.png" />
+    <BitmapImage
+        x:Key="Link"
+        UriSource="/WPFUtility;component/Controls/icons/Link.png" />
     <BitmapImage
         x:Key="New"
-        UriSource="/WPFUtility;component/ActionIcon/icons/New.png" />
+        UriSource="/WPFUtility;component/Controls/icons/New.png" />
     <BitmapImage
         x:Key="Next"
-        UriSource="/WPFUtility;component/ActionIcon/icons/Next.png" />
+        UriSource="/WPFUtility;component/Controls/icons/Next.png" />
     <BitmapImage
         x:Key="No"
-        UriSource="/WPFUtility;component/ActionIcon/icons/No.png" />
+        UriSource="/WPFUtility;component/Controls/icons/No.png" />
     <BitmapImage
         x:Key="Ok"
-        UriSource="/WPFUtility;component/ActionIcon/icons/Ok.png" />
+        UriSource="/WPFUtility;component/Controls/icons/Ok.png" />
     <BitmapImage
         x:Key="Open"
-        UriSource="/WPFUtility;component/ActionIcon/icons/Open.png" />
+        UriSource="/WPFUtility;component/Controls/icons/Open.png" />
     <BitmapImage
         x:Key="Pause"
-        UriSource="/WPFUtility;component/ActionIcon/icons/Pause.png" />
+        UriSource="/WPFUtility;component/Controls/icons/Pause.png" />
     <BitmapImage
         x:Key="Redo"
-        UriSource="/WPFUtility;component/ActionIcon/icons/Redo.png" />
+        UriSource="/WPFUtility;component/Controls/icons/Redo.png" />
     <BitmapImage
         x:Key="Refresh"
-        UriSource="/WPFUtility;component/ActionIcon/icons/Refresh.png" />
+        UriSource="/WPFUtility;component/Controls/icons/Refresh.png" />
     <BitmapImage
         x:Key="Previous"
-        UriSource="/WPFUtility;component/ActionIcon/icons/Previous.png" />
+        UriSource="/WPFUtility;component/Controls/icons/Previous.png" />
     <BitmapImage
         x:Key="Remove"
-        UriSource="/WPFUtility;component/ActionIcon/icons/Remove.png" />
+        UriSource="/WPFUtility;component/Controls/icons/Remove.png" />
     <BitmapImage
         x:Key="Run"
-        UriSource="/WPFUtility;component/ActionIcon/icons/Run.png" />
+        UriSource="/WPFUtility;component/Controls/icons/Run.png" />
     <BitmapImage
         x:Key="Save"
-        UriSource="/WPFUtility;component/ActionIcon/icons/Save.png" />
+        UriSource="/WPFUtility;component/Controls/icons/Save.png" />
     <BitmapImage
         x:Key="SaveReverse"
-        UriSource="/WPFUtility;component/ActionIcon/icons/SaveReverse.png" />
+        UriSource="/WPFUtility;component/Controls/icons/SaveReverse.png" />
     <BitmapImage
         x:Key="Share"
-        UriSource="/WPFUtility;component/ActionIcon/icons/Share.png" />
+        UriSource="/WPFUtility;component/Controls/icons/Share.png" />
     <BitmapImage
         x:Key="Star"
-        UriSource="/WPFUtility;component/ActionIcon/icons/Star.png" />
+        UriSource="/WPFUtility;component/Controls/icons/Star.png" />
     <BitmapImage
         x:Key="Stop"
-        UriSource="/WPFUtility;component/ActionIcon/icons/Stop.png" />
+        UriSource="/WPFUtility;component/Controls/icons/Stop.png" />
     <BitmapImage
         x:Key="Sync"
-        UriSource="/WPFUtility;component/ActionIcon/icons/Sync.png" />
+        UriSource="/WPFUtility;component/Controls/icons/Sync.png" />
     <BitmapImage
         x:Key="Undo"
-        UriSource="/WPFUtility;component/ActionIcon/icons/Undo.png" />
+        UriSource="/WPFUtility;component/Controls/icons/Undo.png" />
     <BitmapImage
         x:Key="Upload"
-        UriSource="/WPFUtility;component/ActionIcon/icons/Upload.png" />
+        UriSource="/WPFUtility;component/Controls/icons/Upload.png" />
     <BitmapImage
         x:Key="Validate"
-        UriSource="/WPFUtility;component/ActionIcon/icons/Validate.png" />
+        UriSource="/WPFUtility;component/Controls/icons/Validate.png" />
     <BitmapImage
         x:Key="Warning"
-        UriSource="/WPFUtility;component/ActionIcon/icons/Warning.png" />
+        UriSource="/WPFUtility;component/Controls/icons/Warning.png" />
 </ResourceDictionary>

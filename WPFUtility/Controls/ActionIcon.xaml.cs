@@ -9,6 +9,7 @@ using System.Windows.Controls;
 using System.Windows.Data;
 using System.Windows.Documents;
 using System.Windows.Input;
+using System.Windows.Markup;
 using System.Windows.Media;
 using System.Windows.Media.Imaging;
 using System.Windows.Navigation;
@@ -16,6 +17,7 @@ using System.Windows.Shapes;
 
 namespace Wildgoat.WPFUtility.Controls
 {
+    [ContentProperty(nameof(BaseTemplate))]
     public partial class ActionIcon : UserControl
     {
         public static readonly DependencyProperty ActionProperty = DependencyProperty.Register(
@@ -220,10 +222,12 @@ namespace Wildgoat.WPFUtility.Controls
             Icon.EDIT => "Edit",
             Icon.EDIT_REVERSE => "EditReverse",
             Icon.ERROR => "Error",
+            Icon.EXT_LINK => "ExtLink",
             Icon.FIND => "Find",
             Icon.HELP => "Help",
             Icon.IMPORT => "Import",
             Icon.INFO => "Info",
+            Icon.LINK => "Link",
             Icon.LOCK => "Lock",
             Icon.NEW => "New",
             Icon.NEXT => "Next",
