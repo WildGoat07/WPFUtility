@@ -1,6 +1,7 @@
 using System;
 using System.Collections.Generic;
 using System.ComponentModel;
+using System.Globalization;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
@@ -17,72 +18,100 @@ using System.Windows.Shapes;
 
 namespace Wildgoat.WPFUtility.Controls
 {
-    [ContentProperty(nameof(BaseTemplate))]
+    /// <summary>
+    /// The behaviour of the small icons
+    /// </summary>
+    public enum IconBehaviour
+    {
+        /// <summary>
+        /// The icons will try to fit as much as possible in the space taken by the Base, they may overlap
+        /// </summary>
+        FIT,
+
+        /// <summary>
+        /// The icons will avoid being overlaping each other, but the resulting icon may look bigger than the Base
+        /// </summary>
+        AVOID_OVERLAP
+    }
+
+    [ContentProperty(nameof(BaseContent))]
     public partial class ActionIcon : UserControl
     {
+        public static readonly DependencyProperty ActionContentProperty = DependencyProperty.Register(
+            nameof(ActionContent),
+            typeof(UIElement),
+            typeof(ActionIcon),
+            new FrameworkPropertyMetadata(null, FrameworkPropertyMetadataOptions.AffectsRender));
+
+        public static readonly DependencyProperty ActionImageProperty = DependencyProperty.Register(
+                    nameof(ActionImage),
+            typeof(ImageSource),
+            typeof(ActionIcon),
+            new FrameworkPropertyMetadata(null, FrameworkPropertyMetadataOptions.AffectsRender));
+
         public static readonly DependencyProperty ActionProperty = DependencyProperty.Register(
-            nameof(Action),
+                    nameof(Action),
             typeof(Icon?),
             typeof(ActionIcon),
-            new FrameworkPropertyMetadata(null, FrameworkPropertyMetadataOptions.AffectsRender, OnActionPropertyChanged));
+            new FrameworkPropertyMetadata(null, FrameworkPropertyMetadataOptions.AffectsRender));
 
-        public static readonly DependencyProperty ActionSourceProperty = DependencyProperty.Register(
-            nameof(ActionSource),
+        public static readonly DependencyProperty BaseContentProperty = DependencyProperty.Register(
+            nameof(BaseContent),
+            typeof(UIElement),
+            typeof(ActionIcon),
+            new FrameworkPropertyMetadata(null, FrameworkPropertyMetadataOptions.AffectsRender));
+
+        public static readonly DependencyProperty BaseImageProperty = DependencyProperty.Register(
+                    nameof(BaseImage),
             typeof(ImageSource),
             typeof(ActionIcon),
             new FrameworkPropertyMetadata(null, FrameworkPropertyMetadataOptions.AffectsRender));
 
-        public static readonly DependencyProperty ActionTemplateProperty = DependencyProperty.Register(
-            nameof(ActionTemplate),
-            typeof(DataTemplate),
+        public static readonly DependencyProperty IconBehaviourProperty = DependencyProperty.Register(
+                nameof(IconBehaviour),
+            typeof(IconBehaviour),
+            typeof(ActionIcon),
+            new FrameworkPropertyMetadata(IconBehaviour.FIT, FrameworkPropertyMetadataOptions.AffectsRender));
+
+        public static readonly DependencyProperty IconGapProperty = DependencyProperty.Register(
+                    nameof(IconGap),
+            typeof(Thickness),
+            typeof(ActionIcon),
+            new FrameworkPropertyMetadata(new Thickness(0), FrameworkPropertyMetadataOptions.AffectsRender));
+
+        public static readonly DependencyProperty ModifierContentProperty = DependencyProperty.Register(
+                            nameof(ModifierContent),
+            typeof(UIElement),
             typeof(ActionIcon),
             new FrameworkPropertyMetadata(null, FrameworkPropertyMetadataOptions.AffectsRender));
 
-        public static readonly DependencyProperty BaseSourceProperty = DependencyProperty.Register(
-            nameof(BaseSource),
+        public static readonly DependencyProperty ModifierImageProperty = DependencyProperty.Register(
+                    nameof(ModifierImage),
             typeof(ImageSource),
-            typeof(ActionIcon),
-            new FrameworkPropertyMetadata(null, FrameworkPropertyMetadataOptions.AffectsRender));
-
-        public static readonly DependencyProperty BaseTemplateProperty = DependencyProperty.Register(
-            nameof(BaseTemplate),
-            typeof(DataTemplate),
             typeof(ActionIcon),
             new FrameworkPropertyMetadata(null, FrameworkPropertyMetadataOptions.AffectsRender));
 
         public static readonly DependencyProperty ModifierProperty = DependencyProperty.Register(
-            nameof(Modifier),
+                    nameof(Modifier),
             typeof(Icon?),
-            typeof(ActionIcon),
-            new FrameworkPropertyMetadata(null, FrameworkPropertyMetadataOptions.AffectsRender, OnModifierPropertyChanged));
-
-        public static readonly DependencyProperty ModifierSourceProperty = DependencyProperty.Register(
-            nameof(ModifierSource),
-            typeof(ImageSource),
             typeof(ActionIcon),
             new FrameworkPropertyMetadata(null, FrameworkPropertyMetadataOptions.AffectsRender));
 
-        public static readonly DependencyProperty ModifierTemplateProperty = DependencyProperty.Register(
-            nameof(ModifierTemplate),
-            typeof(DataTemplate),
+        public static readonly DependencyProperty StatusContentProperty = DependencyProperty.Register(
+            nameof(StatusContent),
+            typeof(UIElement),
+            typeof(ActionIcon),
+            new FrameworkPropertyMetadata(null, FrameworkPropertyMetadataOptions.AffectsRender));
+
+        public static readonly DependencyProperty StatusImageProperty = DependencyProperty.Register(
+                    nameof(StatusImage),
+            typeof(ImageSource),
             typeof(ActionIcon),
             new FrameworkPropertyMetadata(null, FrameworkPropertyMetadataOptions.AffectsRender));
 
         public static readonly DependencyProperty StatusProperty = DependencyProperty.Register(
-            nameof(Status),
+                    nameof(Status),
             typeof(Icon?),
-            typeof(ActionIcon),
-            new FrameworkPropertyMetadata(null, FrameworkPropertyMetadataOptions.AffectsRender, OnStatusPropertyChanged));
-
-        public static readonly DependencyProperty StatusSourceProperty = DependencyProperty.Register(
-            nameof(StatusSource),
-            typeof(ImageSource),
-            typeof(ActionIcon),
-            new FrameworkPropertyMetadata(null, FrameworkPropertyMetadataOptions.AffectsRender));
-
-        public static readonly DependencyProperty StatusTemplateProperty = DependencyProperty.Register(
-                                                                    nameof(StatusTemplate),
-            typeof(DataTemplate),
             typeof(ActionIcon),
             new FrameworkPropertyMetadata(null, FrameworkPropertyMetadataOptions.AffectsRender));
 
@@ -93,15 +122,6 @@ namespace Wildgoat.WPFUtility.Controls
         {
             InitializeComponent();
         }
-
-        [Description("Triggers after the Action property has changed.")]
-        public event EventHandler<IconChangedEventArgs>? ActionChanged;
-
-        [Description("Triggers after the Modifier property has changed.")]
-        public event EventHandler<IconChangedEventArgs>? ModifierChanged;
-
-        [Description("Triggers after the Status property has changed.")]
-        public event EventHandler<IconChangedEventArgs>? StatusChanged;
 
         /// <summary>
         /// Icon used in the top left area
@@ -114,43 +134,63 @@ namespace Wildgoat.WPFUtility.Controls
         }
 
         /// <summary>
-        /// Custom source image for the top left area.
-        /// </summary>
-        [Description("Custom source for the icon in the top left."), Category("Appearance")]
-        public ImageSource? ActionSource
-        {
-            get => GetValue(ActionSourceProperty) as ImageSource;
-            set => SetValue(ActionSourceProperty, value);
-        }
-
-        /// <summary>
         /// Custom template for the top left area.
         /// </summary>
         [Description("Custom template icon in the top left.")]
-        public DataTemplate? ActionTemplate
+        public UIElement? ActionContent
         {
-            get => GetValue(ActionTemplateProperty) as DataTemplate;
-            set => SetValue(ActionTemplateProperty, value);
+            get => GetValue(ActionContentProperty) as UIElement;
+            set => SetValue(ActionContentProperty, value);
         }
 
         /// <summary>
-        /// Source image of the base reference icon.
+        /// Custom source image for the top left area.
         /// </summary>
-        [Description("Source of the main icon."), Category("Appearance")]
-        public ImageSource? BaseSource
+        [Description("Custom source for the icon in the top left."), Category("Appearance")]
+        public ImageSource? ActionImage
         {
-            get => GetValue(BaseSourceProperty) as ImageSource;
-            set => SetValue(BaseSourceProperty, value);
+            get => GetValue(ActionImageProperty) as ImageSource;
+            set => SetValue(ActionImageProperty, value);
         }
 
         /// <summary>
         /// Custom template for the main icon.
         /// </summary>
         [Description("Custom template of the main icon.")]
-        public DataTemplate? BaseTemplate
+        public UIElement? BaseContent
         {
-            get => GetValue(BaseTemplateProperty) as DataTemplate;
-            set => SetValue(BaseTemplateProperty, value);
+            get => GetValue(BaseContentProperty) as UIElement;
+            set => SetValue(BaseContentProperty, value);
+        }
+
+        /// <summary>
+        /// Source image of the base reference icon.
+        /// </summary>
+        [Description("Source of the main icon."), Category("Appearance")]
+        public ImageSource? BaseImage
+        {
+            get => GetValue(BaseImageProperty) as ImageSource;
+            set => SetValue(BaseImageProperty, value);
+        }
+
+        /// <summary>
+        /// The way the icons are layed
+        /// </summary>
+        [Description("The way the icons are layed."), Category("Appearance")]
+        public IconBehaviour IconBehaviour
+        {
+            get => (IconBehaviour)GetValue(IconBehaviourProperty);
+            set => SetValue(IconBehaviourProperty, value);
+        }
+
+        /// <summary>
+        /// Gap between icons, for better visibility
+        /// </summary>
+        [Description("Gap between icons, for better visibility."), Category("Layout")]
+        public Thickness IconGap
+        {
+            get => (Thickness)GetValue(IconGapProperty);
+            set => SetValue(IconGapProperty, value);
         }
 
         /// <summary>
@@ -164,23 +204,23 @@ namespace Wildgoat.WPFUtility.Controls
         }
 
         /// <summary>
-        /// Custom source image for the bottom left area.
-        /// </summary>
-        [Description("Custom source for the icon in the bottom left."), Category("Appearance")]
-        public ImageSource? ModifierSource
-        {
-            get => GetValue(ModifierSourceProperty) as ImageSource;
-            set => SetValue(ModifierSourceProperty, value);
-        }
-
-        /// <summary>
         /// Custom template for the bottom left area.
         /// </summary>
         [Description("Custom template icon in the bottom left.")]
-        public DataTemplate? ModifierTemplate
+        public UIElement? ModifierContent
         {
-            get => GetValue(ModifierTemplateProperty) as DataTemplate;
-            set => SetValue(ModifierTemplateProperty, value);
+            get => GetValue(ModifierContentProperty) as UIElement;
+            set => SetValue(ModifierContentProperty, value);
+        }
+
+        /// <summary>
+        /// Custom source image for the bottom left area.
+        /// </summary>
+        [Description("Custom source for the icon in the bottom left."), Category("Appearance")]
+        public ImageSource? ModifierImage
+        {
+            get => GetValue(ModifierImageProperty) as ImageSource;
+            set => SetValue(ModifierImageProperty, value);
         }
 
         /// <summary>
@@ -194,26 +234,26 @@ namespace Wildgoat.WPFUtility.Controls
         }
 
         /// <summary>
-        /// Custom source image for the bottom right area.
-        /// </summary>
-        [Description("Custom source for the icon in the bottom right."), Category("Appearance")]
-        public ImageSource? StatusSource
-        {
-            get => GetValue(StatusSourceProperty) as ImageSource;
-            set => SetValue(StatusSourceProperty, value);
-        }
-
-        /// <summary>
         /// Custom template for the bottom right area.
         /// </summary>
         [Description("Custom template icon in the bottom left.")]
-        public DataTemplate? StatusTemplate
+        public UIElement? StatusContent
         {
-            get => GetValue(StatusTemplateProperty) as DataTemplate;
-            set => SetValue(StatusTemplateProperty, value);
+            get => GetValue(StatusContentProperty) as UIElement;
+            set => SetValue(StatusContentProperty, value);
         }
 
-        private static string? GetIconKey(Icon? icon) => icon switch
+        /// <summary>
+        /// Custom source image for the bottom right area.
+        /// </summary>
+        [Description("Custom source for the icon in the bottom right."), Category("Appearance")]
+        public ImageSource? StatusImage
+        {
+            get => GetValue(StatusImageProperty) as ImageSource;
+            set => SetValue(StatusImageProperty, value);
+        }
+
+        internal static string? GetIconKey(Icon? icon) => icon switch
         {
             Icon.ADD => "Add",
             Icon.ALERT => "Alert",
@@ -251,35 +291,43 @@ namespace Wildgoat.WPFUtility.Controls
             Icon.WARNING => "Warning",
             _ => null,
         };
+    }
 
-        private static void OnActionPropertyChanged(DependencyObject d, DependencyPropertyChangedEventArgs e)
+    internal class GetIconConverter : IMultiValueConverter
+    {
+        public object? Convert(object[] values, Type targetType, object parameter, CultureInfo culture)
         {
-            var actionIcon = (ActionIcon)d;
-            var key = GetIconKey(e.NewValue as Icon?);
-            actionIcon.ActionSource = key is null
-                ? null
-                : actionIcon.TryFindResource(key) as ImageSource;
-            actionIcon.ActionChanged?.Invoke(actionIcon, new IconChangedEventArgs(e.OldValue as Icon?, e.NewValue as Icon?));
+            var icon = values[0] as Icon?;
+            var sender = values[1] as ActionIcon;
+            if (icon != null && sender != null)
+                return sender.TryFindResource(ActionIcon.GetIconKey(icon));
+            else
+                return null;
         }
 
-        private static void OnModifierPropertyChanged(DependencyObject d, DependencyPropertyChangedEventArgs e)
+        public object[] ConvertBack(object value, Type[] targetTypes, object parameter, CultureInfo culture)
         {
-            var actionIcon = (ActionIcon)d;
-            var key = GetIconKey(e.NewValue as Icon?);
-            actionIcon.ModifierSource = key is null
-                ? null
-                : actionIcon.TryFindResource(key) as ImageSource;
-            actionIcon.ModifierChanged?.Invoke(actionIcon, new IconChangedEventArgs(e.OldValue as Icon?, e.NewValue as Icon?));
+            throw new NotSupportedException();
+        }
+    }
+
+    internal class IconGapConverter : IValueConverter
+    {
+        public object Convert(object value, Type targetType, object parameter, CultureInfo culture)
+        {
+            var thickness = (Thickness)value;
+            return int.Parse(parameter.ToString() ?? "-1") switch
+            {
+                0 => new Thickness(0, 0, thickness.Right, thickness.Bottom),
+                1 => new Thickness(thickness.Left, thickness.Top, 0, 0),
+                2 => new Thickness(0, thickness.Top, thickness.Right, 0),
+                _ => new Thickness(0)
+            };
         }
 
-        private static void OnStatusPropertyChanged(DependencyObject d, DependencyPropertyChangedEventArgs e)
+        public object ConvertBack(object value, Type targetType, object parameter, CultureInfo culture)
         {
-            var actionIcon = (ActionIcon)d;
-            var key = GetIconKey(e.NewValue as Icon?);
-            actionIcon.StatusSource = key is null
-                ? null
-                : actionIcon.TryFindResource(key) as ImageSource;
-            actionIcon.StatusChanged?.Invoke(actionIcon, new IconChangedEventArgs(e.OldValue as Icon?, e.NewValue as Icon?));
+            throw new NotSupportedException();
         }
     }
 }

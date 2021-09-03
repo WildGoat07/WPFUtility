@@ -4,6 +4,7 @@
              xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
              xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
              xmlns:local="clr-namespace:Wildgoat.WPFUtility.Controls"
+             xmlns:converters="clr-namespace:Wildgoat.WPFUtility.ValueConverters"
              mc:Ignorable="d"
              UseLayoutRounding="True">
     <UserControl.Resources>
@@ -12,6 +13,9 @@
                 <ResourceDictionary
                     Source="Icons.xaml" />
                 <ResourceDictionary>
+                    <converters:IsNullConverter x:Key="IsNullConverter" />
+                    <local:GetIconConverter x:Key="GetIconConverter" />
+                    <local:IconGapConverter x:Key="IconGapConverter" />
                     <Style
                         TargetType="Image"
                         x:Key="IconImage">
@@ -25,122 +29,403 @@
                             </Trigger>
                         </Style.Triggers>
                     </Style>
-                    <DataTemplate
-                        x:Key="baseTemplate">
+                    <ControlTemplate
+                        x:Key="BaseContent">
+                        <ContentPresenter
+                            Content="{Binding RelativeSource={RelativeSource AncestorType=local:ActionIcon}, Path=BaseContent}" />
+                    </ControlTemplate>
+                    <ControlTemplate
+                        x:Key="BaseImage">
                         <Image
-                            Style="{StaticResource IconImage}"
                             Stretch="None"
-                            Source="{Binding RelativeSource={RelativeSource AncestorType={x:Type local:ActionIcon}}, Path=BaseSource}" />
-                    </DataTemplate>
-                    <DataTemplate
-                        x:Key="actionTemplate">
+                            Source="{Binding RelativeSource={RelativeSource AncestorType=local:ActionIcon}, Path=BaseImage}" />
+                    </ControlTemplate>
+                    <ControlTemplate
+                        x:Key="ActionContent">
+                        <ContentPresenter
+                            Content="{Binding RelativeSource={RelativeSource AncestorType=local:ActionIcon}, Path=ActionContent}" />
+                    </ControlTemplate>
+                    <ControlTemplate
+                        x:Key="ActionImage">
                         <Image
-                            Style="{StaticResource IconImage}"
                             Stretch="None"
-                            Source="{Binding RelativeSource={RelativeSource AncestorType={x:Type local:ActionIcon}}, Path=ActionSource}" />
-                    </DataTemplate>
-                    <DataTemplate
-                        x:Key="statusTemplate">
+                            Source="{Binding RelativeSource={RelativeSource AncestorType=local:ActionIcon}, Path=ActionImage}" />
+                    </ControlTemplate>
+                    <ControlTemplate
+                        x:Key="Action">
                         <Image
-                            Style="{StaticResource IconImage}"
-                            Stretch="None"
-                            Source="{Binding RelativeSource={RelativeSource AncestorType={x:Type local:ActionIcon}}, Path=StatusSource}" />
-                    </DataTemplate>
-                    <DataTemplate
-                        x:Key="modifierTemplate">
+                            Stretch="None">
+                            <Image.Source>
+                                <MultiBinding
+                                    Converter="{StaticResource GetIconConverter}">
+                                    <Binding
+                                        RelativeSource="{RelativeSource AncestorType=local:ActionIcon}"
+                                        Path="Action" />
+                                    <Binding
+                                        RelativeSource="{RelativeSource AncestorType=local:ActionIcon}" />
+                                </MultiBinding>
+                            </Image.Source>
+                        </Image>
+                    </ControlTemplate>
+                    <ControlTemplate
+                        x:Key="StatusContent">
+                        <ContentPresenter
+                            Content="{Binding RelativeSource={RelativeSource AncestorType=local:ActionIcon}, Path=StatusContent}" />
+                    </ControlTemplate>
+                    <ControlTemplate
+                        x:Key="StatusImage">
                         <Image
-                            Style="{StaticResource IconImage}"
                             Stretch="None"
-                            Source="{Binding RelativeSource={RelativeSource AncestorType={x:Type local:ActionIcon}}, Path=ModifierSource}" />
-                    </DataTemplate>
+                            Source="{Binding RelativeSource={RelativeSource AncestorType=local:ActionIcon}, Path=StatusImage}" />
+                    </ControlTemplate>
+                    <ControlTemplate
+                        x:Key="Status">
+                        <Image
+                            Stretch="None">
+                            <Image.Source>
+                                <MultiBinding
+                                    Converter="{StaticResource GetIconConverter}">
+                                    <Binding
+                                        RelativeSource="{RelativeSource AncestorType=local:ActionIcon}"
+                                        Path="Status" />
+                                    <Binding
+                                        RelativeSource="{RelativeSource AncestorType=local:ActionIcon}" />
+                                </MultiBinding>
+                            </Image.Source>
+                        </Image>
+                    </ControlTemplate>
+                    <ControlTemplate
+                        x:Key="ModifierContent">
+                        <ContentPresenter
+                            Content="{Binding RelativeSource={RelativeSource AncestorType=local:ActionIcon}, Path=ModifierContent}" />
+                    </ControlTemplate>
+                    <ControlTemplate
+                        x:Key="ModifierImage">
+                        <Image
+                            Stretch="None"
+                            Source="{Binding RelativeSource={RelativeSource AncestorType=local:ActionIcon}, Path=ModifierImage}" />
+                    </ControlTemplate>
+                    <ControlTemplate
+                        x:Key="Modifier">
+                        <Image
+                            Stretch="None">
+                            <Image.Source>
+                                <MultiBinding
+                                    Converter="{StaticResource GetIconConverter}">
+                                    <Binding
+                                        RelativeSource="{RelativeSource AncestorType=local:ActionIcon}"
+                                        Path="Modifier" />
+                                    <Binding
+                                        RelativeSource="{RelativeSource AncestorType=local:ActionIcon}" />
+                                </MultiBinding>
+                            </Image.Source>
+                        </Image>
+                    </ControlTemplate>
+                    <ControlTemplate
+                        x:Key="OverlapTemplate">
+                        <Grid
+                            VerticalAlignment="Center"
+                            HorizontalAlignment="Center">
+                            <ContentControl
+                                Margin="{Binding RelativeSource={RelativeSource AncestorType=local:ActionIcon}, Path=IconGap}"
+                                VerticalAlignment="Center"
+                                HorizontalAlignment="Center">
+                                <ContentControl.Style>
+                                    <Style
+                                        TargetType="ContentControl">
+                                        <Style.Triggers>
+                                            <DataTrigger
+                                                Binding="{Binding RelativeSource={RelativeSource AncestorType=local:ActionIcon}, Path=BaseImage, Converter={StaticResource IsNullConverter}}"
+                                                Value="False">
+                                                <Setter
+                                                    Property="Template"
+                                                    Value="{StaticResource BaseImage}" />
+                                            </DataTrigger>
+                                            <DataTrigger
+                                                Binding="{Binding RelativeSource={RelativeSource AncestorType=local:ActionIcon}, Path=BaseContent, Converter={StaticResource IsNullConverter}}"
+                                                Value="False">
+                                                <Setter
+                                                    Property="Template"
+                                                    Value="{StaticResource BaseContent}" />
+                                            </DataTrigger>
+                                        </Style.Triggers>
+                                    </Style>
+                                </ContentControl.Style>
+                            </ContentControl>
+                            <ContentControl
+                                VerticalAlignment="Bottom"
+                                HorizontalAlignment="Left">
+                                <ContentControl.Style>
+                                    <Style
+                                        TargetType="ContentControl">
+                                        <Style.Triggers>
+                                            <DataTrigger
+                                                Binding="{Binding RelativeSource={RelativeSource AncestorType=local:ActionIcon}, Path=Modifier, Converter={StaticResource IsNullConverter}}"
+                                                Value="False">
+                                                <Setter
+                                                    Property="Template"
+                                                    Value="{StaticResource Modifier}" />
+                                            </DataTrigger>
+                                            <DataTrigger
+                                                Binding="{Binding RelativeSource={RelativeSource AncestorType=local:ActionIcon}, Path=ModifierImage, Converter={StaticResource IsNullConverter}}"
+                                                Value="False">
+                                                <Setter
+                                                    Property="Template"
+                                                    Value="{StaticResource ModifierImage}" />
+                                            </DataTrigger>
+                                            <DataTrigger
+                                                Binding="{Binding RelativeSource={RelativeSource AncestorType=local:ActionIcon}, Path=ModifierContent, Converter={StaticResource IsNullConverter}}"
+                                                Value="False">
+                                                <Setter
+                                                    Property="Template"
+                                                    Value="{StaticResource ModifierContent}" />
+                                            </DataTrigger>
+                                        </Style.Triggers>
+                                    </Style>
+                                </ContentControl.Style>
+                            </ContentControl>
+                            <ContentControl
+                                VerticalAlignment="Bottom"
+                                HorizontalAlignment="Right">
+                                <ContentControl.Style>
+                                    <Style
+                                        TargetType="ContentControl">
+                                        <Style.Triggers>
+                                            <DataTrigger
+                                                Binding="{Binding RelativeSource={RelativeSource AncestorType=local:ActionIcon}, Path=Status, Converter={StaticResource IsNullConverter}}"
+                                                Value="False">
+                                                <Setter
+                                                    Property="Template"
+                                                    Value="{StaticResource Status}" />
+                                            </DataTrigger>
+                                            <DataTrigger
+                                                Binding="{Binding RelativeSource={RelativeSource AncestorType=local:ActionIcon}, Path=StatusImage, Converter={StaticResource IsNullConverter}}"
+                                                Value="False">
+                                                <Setter
+                                                    Property="Template"
+                                                    Value="{StaticResource StatusImage}" />
+                                            </DataTrigger>
+                                            <DataTrigger
+                                                Binding="{Binding RelativeSource={RelativeSource AncestorType=local:ActionIcon}, Path=StatusContent, Converter={StaticResource IsNullConverter}}"
+                                                Value="False">
+                                                <Setter
+                                                    Property="Template"
+                                                    Value="{StaticResource StatusContent}" />
+                                            </DataTrigger>
+                                        </Style.Triggers>
+                                    </Style>
+                                </ContentControl.Style>
+                            </ContentControl>
+                            <ContentControl
+                                VerticalAlignment="Top"
+                                HorizontalAlignment="Left">
+                                <ContentControl.Style>
+                                    <Style
+                                        TargetType="ContentControl">
+                                        <Style.Triggers>
+                                            <DataTrigger
+                                                Binding="{Binding RelativeSource={RelativeSource AncestorType=local:ActionIcon}, Path=Action, Converter={StaticResource IsNullConverter}}"
+                                                Value="False">
+                                                <Setter
+                                                    Property="Template"
+                                                    Value="{StaticResource Action}" />
+                                            </DataTrigger>
+                                            <DataTrigger
+                                                Binding="{Binding RelativeSource={RelativeSource AncestorType=local:ActionIcon}, Path=ActionImage, Converter={StaticResource IsNullConverter}}"
+                                                Value="False">
+                                                <Setter
+                                                    Property="Template"
+                                                    Value="{StaticResource ActionImage}" />
+                                            </DataTrigger>
+                                            <DataTrigger
+                                                Binding="{Binding RelativeSource={RelativeSource AncestorType=local:ActionIcon}, Path=ActionContent, Converter={StaticResource IsNullConverter}}"
+                                                Value="False">
+                                                <Setter
+                                                    Property="Template"
+                                                    Value="{StaticResource ActionContent}" />
+                                            </DataTrigger>
+                                        </Style.Triggers>
+                                    </Style>
+                                </ContentControl.Style>
+                            </ContentControl>
+                        </Grid>
+                    </ControlTemplate>
+                    <ControlTemplate
+                        x:Key="NoOverlapTemplate">
+                        <Grid
+                            VerticalAlignment="Center"
+                            HorizontalAlignment="Center"
+                            MinWidth="{Binding ElementName=Base, Path=ActualWidth}"
+                            MinHeight="{Binding ElementName=Base, Path=ActualHeight}">
+                            <Grid.ColumnDefinitions>
+                                <ColumnDefinition
+                                    Width="auto" />
+                                <ColumnDefinition
+                                    Width="auto" />
+                            </Grid.ColumnDefinitions>
+                            <Grid.RowDefinitions>
+                                <RowDefinition
+                                    Height="auto" />
+                                <RowDefinition
+                                    Height="auto" />
+                            </Grid.RowDefinitions>
+                            <ContentControl
+                                Name="Base"
+                                VerticalAlignment="Center"
+                                HorizontalAlignment="Center"
+                                Grid.ColumnSpan="2"
+                                Grid.RowSpan="2">
+                                <ContentControl.Style>
+                                    <Style
+                                        TargetType="ContentControl">
+                                        <Style.Triggers>
+                                            <DataTrigger
+                                                Binding="{Binding RelativeSource={RelativeSource AncestorType=local:ActionIcon}, Path=BaseImage, Converter={StaticResource IsNullConverter}}"
+                                                Value="False">
+                                                <Setter
+                                                    Property="Template"
+                                                    Value="{StaticResource BaseImage}" />
+                                            </DataTrigger>
+                                            <DataTrigger
+                                                Binding="{Binding RelativeSource={RelativeSource AncestorType=local:ActionIcon}, Path=BaseContent, Converter={StaticResource IsNullConverter}}"
+                                                Value="False">
+                                                <Setter
+                                                    Property="Template"
+                                                    Value="{StaticResource BaseContent}" />
+                                            </DataTrigger>
+                                        </Style.Triggers>
+                                    </Style>
+                                </ContentControl.Style>
+                            </ContentControl>
+                            <ContentControl
+                                Margin="{Binding RelativeSource={RelativeSource AncestorType=local:ActionIcon}, Path=IconGap, Converter={StaticResource IconGapConverter}, ConverterParameter=2}"
+                                VerticalAlignment="Bottom"
+                                HorizontalAlignment="Left"
+                                Grid.Row="1">
+                                <ContentControl.Style>
+                                    <Style
+                                        TargetType="ContentControl">
+                                        <Style.Triggers>
+                                            <DataTrigger
+                                                Binding="{Binding RelativeSource={RelativeSource AncestorType=local:ActionIcon}, Path=Modifier, Converter={StaticResource IsNullConverter}}"
+                                                Value="False">
+                                                <Setter
+                                                    Property="Template"
+                                                    Value="{StaticResource Modifier}" />
+                                            </DataTrigger>
+                                            <DataTrigger
+                                                Binding="{Binding RelativeSource={RelativeSource AncestorType=local:ActionIcon}, Path=ModifierImage, Converter={StaticResource IsNullConverter}}"
+                                                Value="False">
+                                                <Setter
+                                                    Property="Template"
+                                                    Value="{StaticResource ModifierImage}" />
+                                            </DataTrigger>
+                                            <DataTrigger
+                                                Binding="{Binding RelativeSource={RelativeSource AncestorType=local:ActionIcon}, Path=ModifierContent, Converter={StaticResource IsNullConverter}}"
+                                                Value="False">
+                                                <Setter
+                                                    Property="Template"
+                                                    Value="{StaticResource ModifierContent}" />
+                                            </DataTrigger>
+                                        </Style.Triggers>
+                                    </Style>
+                                </ContentControl.Style>
+                            </ContentControl>
+                            <ContentControl
+                                Margin="{Binding RelativeSource={RelativeSource AncestorType=local:ActionIcon}, Path=IconGap, Converter={StaticResource IconGapConverter}, ConverterParameter=1}"
+                                VerticalAlignment="Bottom"
+                                HorizontalAlignment="Right"
+                                Grid.Row="1"
+                                Grid.Column="1">
+                                <ContentControl.Style>
+                                    <Style
+                                        TargetType="ContentControl">
+                                        <Style.Triggers>
+                                            <DataTrigger
+                                                Binding="{Binding RelativeSource={RelativeSource AncestorType=local:ActionIcon}, Path=Status, Converter={StaticResource IsNullConverter}}"
+                                                Value="False">
+                                                <Setter
+                                                    Property="Template"
+                                                    Value="{StaticResource Status}" />
+                                            </DataTrigger>
+                                            <DataTrigger
+                                                Binding="{Binding RelativeSource={RelativeSource AncestorType=local:ActionIcon}, Path=StatusImage, Converter={StaticResource IsNullConverter}}"
+                                                Value="False">
+                                                <Setter
+                                                    Property="Template"
+                                                    Value="{StaticResource StatusImage}" />
+                                            </DataTrigger>
+                                            <DataTrigger
+                                                Binding="{Binding RelativeSource={RelativeSource AncestorType=local:ActionIcon}, Path=StatusContent, Converter={StaticResource IsNullConverter}}"
+                                                Value="False">
+                                                <Setter
+                                                    Property="Template"
+                                                    Value="{StaticResource StatusContent}" />
+                                            </DataTrigger>
+                                        </Style.Triggers>
+                                    </Style>
+                                </ContentControl.Style>
+                            </ContentControl>
+                            <ContentControl
+                                Margin="{Binding RelativeSource={RelativeSource AncestorType=local:ActionIcon}, Path=IconGap, Converter={StaticResource IconGapConverter}, ConverterParameter=0}"
+                                VerticalAlignment="Top"
+                                HorizontalAlignment="Left">
+                                <ContentControl.Style>
+                                    <Style
+                                        TargetType="ContentControl">
+                                        <Style.Triggers>
+                                            <DataTrigger
+                                                Binding="{Binding RelativeSource={RelativeSource AncestorType=local:ActionIcon}, Path=Action, Converter={StaticResource IsNullConverter}}"
+                                                Value="False">
+                                                <Setter
+                                                    Property="Template"
+                                                    Value="{StaticResource Action}" />
+                                            </DataTrigger>
+                                            <DataTrigger
+                                                Binding="{Binding RelativeSource={RelativeSource AncestorType=local:ActionIcon}, Path=ActionImage, Converter={StaticResource IsNullConverter}}"
+                                                Value="False">
+                                                <Setter
+                                                    Property="Template"
+                                                    Value="{StaticResource ActionImage}" />
+                                            </DataTrigger>
+                                            <DataTrigger
+                                                Binding="{Binding RelativeSource={RelativeSource AncestorType=local:ActionIcon}, Path=ActionContent, Converter={StaticResource IsNullConverter}}"
+                                                Value="False">
+                                                <Setter
+                                                    Property="Template"
+                                                    Value="{StaticResource ActionContent}" />
+                                            </DataTrigger>
+                                        </Style.Triggers>
+                                    </Style>
+                                </ContentControl.Style>
+                            </ContentControl>
+                        </Grid>
+                    </ControlTemplate>
                 </ResourceDictionary>
             </ResourceDictionary.MergedDictionaries>
         </ResourceDictionary>
     </UserControl.Resources>
-    <Grid
-        VerticalAlignment="Center"
-        HorizontalAlignment="Center">
-        <ContentControl>
-            <ContentControl.Style>
-                <Style
-                    TargetType="ContentControl">
-                    <Setter
-                        Property="ContentTemplate"
-                        Value="{Binding RelativeSource={RelativeSource AncestorType=local:ActionIcon}, Path=BaseTemplate}" />
-                    <Style.Triggers>
-                        <DataTrigger
-                            Binding="{Binding RelativeSource={RelativeSource AncestorType=local:ActionIcon}, Path=BaseTemplate}"
-                            Value="{x:Null}">
-                            <Setter
-                                Property="ContentTemplate"
-                                Value="{StaticResource baseTemplate}" />
-                        </DataTrigger>
-                    </Style.Triggers>
-                </Style>
-            </ContentControl.Style>
-        </ContentControl>
-        <ContentControl
-            VerticalAlignment="Bottom"
-            HorizontalAlignment="Left">
-            <ContentControl.Style>
-                <Style
-                    TargetType="ContentControl">
-                    <Setter
-                        Property="ContentTemplate"
-                        Value="{Binding RelativeSource={RelativeSource AncestorType=local:ActionIcon}, Path=ModifierTemplate}" />
-                    <Style.Triggers>
-                        <DataTrigger
-                            Binding="{Binding RelativeSource={RelativeSource AncestorType=local:ActionIcon}, Path=ModifierTemplate}"
-                            Value="{x:Null}">
-                            <Setter
-                                Property="ContentTemplate"
-                                Value="{StaticResource modifierTemplate}" />
-                        </DataTrigger>
-                    </Style.Triggers>
-                </Style>
-            </ContentControl.Style>
-        </ContentControl>
-        <ContentControl
-            VerticalAlignment="Bottom"
-            HorizontalAlignment="Right">
-            <ContentControl.Style>
-                <Style
-                    TargetType="ContentControl">
-                    <Setter
-                        Property="ContentTemplate"
-                        Value="{Binding RelativeSource={RelativeSource AncestorType=local:ActionIcon}, Path=StatusTemplate}" />
-                    <Style.Triggers>
-                        <DataTrigger
-                            Binding="{Binding RelativeSource={RelativeSource AncestorType=local:ActionIcon}, Path=StatusTemplate}"
-                            Value="{x:Null}">
-                            <Setter
-                                Property="ContentTemplate"
-                                Value="{StaticResource statusTemplate}" />
-                        </DataTrigger>
-                    </Style.Triggers>
-                </Style>
-            </ContentControl.Style>
-        </ContentControl>
-        <ContentControl
-            VerticalAlignment="Top"
-            HorizontalAlignment="Left">
-            <ContentControl.Style>
-                <Style
-                    TargetType="ContentControl">
-                    <Setter
-                        Property="ContentTemplate"
-                        Value="{Binding RelativeSource={RelativeSource AncestorType=local:ActionIcon}, Path=ActionTemplate}" />
-                    <Style.Triggers>
-                        <DataTrigger
-                            Binding="{Binding RelativeSource={RelativeSource AncestorType=local:ActionIcon}, Path=ActionTemplate}"
-                            Value="{x:Null}">
-                            <Setter
-                                Property="ContentTemplate"
-                                Value="{StaticResource actionTemplate}" />
-                        </DataTrigger>
-                    </Style.Triggers>
-                </Style>
-            </ContentControl.Style>
-        </ContentControl>
-    </Grid>
+    <ContentControl>
+        <ContentControl.Style>
+            <Style
+                TargetType="ContentControl">
+                <Style.Triggers>
+                    <DataTrigger
+                        Binding="{Binding RelativeSource={RelativeSource AncestorType=local:ActionIcon}, Path=IconBehaviour}"
+                        Value="FIT">
+                        <Setter
+                            Property="Template"
+                            Value="{StaticResource OverlapTemplate}" />
+                    </DataTrigger>
+                    <DataTrigger
+                        Binding="{Binding RelativeSource={RelativeSource AncestorType=local:ActionIcon}, Path=IconBehaviour}"
+                        Value="AVOID_OVERLAP">
+                        <Setter
+                            Property="Template"
+                            Value="{StaticResource NoOverlapTemplate}" />
+                    </DataTrigger>
+                </Style.Triggers>
+            </Style>
+        </ContentControl.Style>
+    </ContentControl>
 </UserControl>
