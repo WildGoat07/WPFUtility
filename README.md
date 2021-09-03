@@ -64,7 +64,9 @@ For example, imagine two ViewModel, `PersonViewModel` and `CityViewModel`, where
 
 ### Collections
 
-The library contains many different collection view fully compatible with WPF. Each take a base collection (it can be an `ObservableCollection` or another collection view) :
+The library contains many different collection view fully compatible with WPF. Each take a base collection (it can be an `ObservableCollection` or another collection view).
+
+But why ? Because using only the base collection view, only one can be kinda great, the `ListCollectionView` since it can sort and filter easily. But this one takes an `IList`, but is not an `IList` itself ! With this lib, you can chain multiple view and they provide more utility.
 
 - `FilteredCollectionView` : Filters the output view based on the source.
 - `SortedCollectionView` : Sorts the output view based on the source.
