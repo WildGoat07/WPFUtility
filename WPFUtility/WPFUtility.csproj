@@ -5,6 +5,13 @@
     <UseWPF>true</UseWPF>
     <Nullable>enable</Nullable>
     <RootNamespace>Wildgoat.WPFUtility</RootNamespace>
+    <PackageId>wpfutility</PackageId>
+    <Authors>Wildgoat</Authors>
+    <Description>Utility lib for WPF providing some classes for managing data and a few controls.</Description>
+    <PackageLicenseFile>LICENSE</PackageLicenseFile>
+    <PackageProjectUrl>https://github.com/WildGoat07/WPFUtility</PackageProjectUrl>
+    <RepositoryUrl>https://github.com/WildGoat07/WPFUtility</RepositoryUrl>
+    <NeutralLanguage>en</NeutralLanguage>
   </PropertyGroup>
 
   <ItemGroup>
@@ -43,6 +50,10 @@
     <None Remove="Controls\icons\Upload.png" />
     <None Remove="Controls\icons\Validate.png" />
     <None Remove="Controls\icons\Warning.png" />
+    <None Include="..\LICENSE">
+      <Pack>True</Pack>
+      <PackagePath></PackagePath>
+    </None>
   </ItemGroup>
 
   <ItemGroup>
