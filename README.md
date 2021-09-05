@@ -19,7 +19,7 @@ class PersonViewModel : ViewModelBase
     public string Surname { get => (string)GetValue(nameof(Surname)); set => SetValue(nameof(Surname), value); }
 
     //This stores more informations about the diffrent properties, in case a property needs more control
-    protected override Dictionary<string, PropertyDetails> SpecialProperties => new()
+    protected override Dictionary<string, PropertyDetails> SpecialProperties { get; } = new()
     {
         {
             nameof(Age), // we add a special case for the age
