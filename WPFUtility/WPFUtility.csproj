@@ -5,7 +5,7 @@
     <UseWPF>true</UseWPF>
     <Nullable>enable</Nullable>
     <RootNamespace>Wildgoat.WPFUtility</RootNamespace>
-    <PackageId>wpfutility</PackageId>
+    <PackageId>Wildgoat.WPFUtility</PackageId>
     <Authors>Wildgoat</Authors>
     <Description>Utility lib for WPF providing some classes for managing data and a few controls.</Description>
     <PackageLicenseFile>LICENSE</PackageLicenseFile>
