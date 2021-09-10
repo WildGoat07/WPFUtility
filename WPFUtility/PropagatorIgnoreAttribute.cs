@@ -4,7 +4,7 @@ using System.Text;
 
 namespace Wildgoat.WPFUtility
 {
-    internal class PropagatorIgnoreAttribute : Attribute
+    public class PropagatorIgnoreAttribute : Attribute
     {
     }
 }
