@@ -10,14 +10,12 @@ namespace Wildgoat.WPFUtility.Collections
 {
     public class SeparatorCollectionView : IBaseCollectionSource, IEnumerable<object?>, IEnumerable, INotifyCollectionChanged, INotifyPropertyChanged
     {
-        private int count;
         private object separator;
         private IBaseCollectionSource source;
 
         public SeparatorCollectionView(object source, object separator)
         {
             this.source = CollectionSourceWrapper.GetCollection(source);
-            count = this.source.Cast<object?>().Count();
             LinkSource();
             this.separator = separator;
         }
@@ -51,7 +49,6 @@ namespace Wildgoat.WPFUtility.Collections
                 CollectionChanged?.Invoke(this, new NotifyCollectionChangedEventArgs(NotifyCollectionChangedAction.Remove, this.ToList(), 0));
                 UnlinkSource();
                 source = CollectionSourceWrapper.GetCollection(value);
-                count = source.Cast<object?>().Count();
                 LinkSource();
                 CollectionChanged?.Invoke(this, new NotifyCollectionChangedEventArgs(NotifyCollectionChangedAction.Add, this.ToList(), 0));
                 PropertyChanged?.Invoke(this, new PropertyChangedEventArgs(nameof(Source)));
