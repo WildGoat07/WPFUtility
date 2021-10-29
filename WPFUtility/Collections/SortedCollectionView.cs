@@ -54,7 +54,7 @@ namespace Wildgoat.WPFUtility.Collections
             {
                 comparer = value;
                 PropertyChanged?.Invoke(this, new PropertyChangedEventArgs(nameof(Comparer)));
-                Refresh();
+                Initialize();
             }
         }
 
@@ -191,37 +191,6 @@ namespace Wildgoat.WPFUtility.Collections
 
                 case NotifyCollectionChangedAction.Move:
                     break;
-            }
-        }
-
-        private void Refresh()
-        {
-            var insertionPoint = sortedBuffer.First;
-            var newIndex = 0;
-            while (insertionPoint != null)
-            {
-                var smallest = insertionPoint;
-                var node = insertionPoint;
-                var oldIndex = -1;
-                var currIndex = newIndex;
-                while (node != null)
-                {
-                    if (comparer.Compare(smallest.Value, node.Value) > 0)
-                    {
-                        smallest = node;
-                        oldIndex = currIndex;
-                    }
-                    ++currIndex;
-                    node = node.Next;
-                }
-                if (smallest != insertionPoint)
-                {
-                    sortedBuffer.Remove(smallest);
-                    sortedBuffer.AddBefore(insertionPoint, smallest);
-                    CollectionChanged?.Invoke(this, new NotifyCollectionChangedEventArgs(NotifyCollectionChangedAction.Move, smallest.Value, newIndex, oldIndex));
-                }
-                insertionPoint = insertionPoint.Next;
-                ++newIndex;
             }
         }
 
